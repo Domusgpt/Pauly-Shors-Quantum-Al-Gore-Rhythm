@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clear Seas Solutions — Post-Quantum Technology</title>
+    <meta name="description" content="Novel non-generative synthetic cognition, post-quantum cryptography, and the OHUI Secure Internet Protocol. Solo-developed by Paul J. Phillips.">
+    <style>
+        :root {
+            --bg: #030712;
+            --text: #e2e8f0;
+            --text-muted: rgba(200,200,212,0.45);
+            --accent: #00f0ff;
+            --quantum: #00f0ff;
+            --faceted: #a855f7;
+            --holographic: #f43f5e;
+            --gold: #c4a35a;
+            --glass-bg: rgba(255,255,255,0.04);
+            --glass-border: rgba(255,255,255,0.08);
+        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ── Canvas Background ── */
+        #bgCanvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; opacity: 0.6;
+        }
+
+        /* ── Noise Overlay ── */
+        .noise-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; opacity: 0.03; pointer-events: none;
+        }
+
+        /* ── Scroll Progress ── */
+        .scroll-progress {
+            position: fixed; top: 0; left: 0; width: 100%; height: 2px; z-index: 9999;
+            background: linear-gradient(90deg, var(--quantum), var(--faceted), var(--holographic), var(--quantum));
+            background-size: 300% 100%;
+            transform-origin: left; transform: scaleX(0);
+            animation: progressHue 6s linear infinite;
+        }
+        @keyframes progressHue { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
+
+        /* ── Glass Cards ── */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+        }
+
+        /* ── Sections ── */
+        section { position: relative; z-index: 2; }
+
+        /* ═══ HERO ═══ */
+        .hero {
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            text-align: center; padding: 80px 24px;
+        }
+        .hero-content { max-width: 900px; }
+        .hero-badge {
+            display: inline-block; padding: 6px 20px;
+            border: 1px solid rgba(0,240,255,0.35); border-radius: 100px;
+            font-size: 11px; color: var(--accent); letter-spacing: 3px;
+            text-transform: uppercase; margin-bottom: 32px;
+            backdrop-filter: blur(8px); background: rgba(0,240,255,0.04);
+            animation: fadeInDown 1s ease 0.2s both;
+        }
+        .hero-title {
+            font-size: clamp(36px, 8vw, 90px); font-weight: 900;
+            letter-spacing: 4px; line-height: 1.05; color: #fff;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+        .hero-title .accent { color: var(--accent); }
+        .hero-sub {
+            font-size: clamp(15px, 2vw, 20px); color: var(--text-muted);
+            max-width: 650px; margin: 28px auto 0; line-height: 1.8;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+        .hero-scroll {
+            margin-top: 60px; font-size: 11px; letter-spacing: 4px;
+            text-transform: uppercase; color: rgba(255,255,255,0.2);
+            animation: fadeInUp 1s ease 0.8s both;
+        }
+        .scroll-line {
+            width: 1px; height: 60px; background: linear-gradient(to bottom, rgba(0,240,255,0.4), transparent);
+            margin: 12px auto 0;
+        }
+
+        /* ═══ Q-DAY RESULTS ═══ */
+        .results {
+            padding: 120px 24px; max-width: 1100px; margin: 0 auto;
+        }
+        .section-label {
+            font-size: 11px; letter-spacing: 5px; text-transform: uppercase;
+            color: var(--accent); margin-bottom: 16px;
+        }
+        .section-title {
+            font-size: clamp(28px, 5vw, 52px); font-weight: 800; color: #fff;
+            margin-bottom: 20px; line-height: 1.15;
+        }
+        .section-desc {
+            font-size: 17px; color: var(--text-muted); max-width: 600px;
+            margin-bottom: 48px; line-height: 1.7;
+        }
+
+        /* Results Table */
+        .results-table {
+            width: 100%; border-collapse: collapse; font-size: 14px;
+        }
+        .results-table th {
+            text-align: left; padding: 14px 16px; font-size: 11px; letter-spacing: 2px;
+            text-transform: uppercase; color: var(--accent);
+            border-bottom: 1px solid rgba(0,240,255,0.15);
+        }
+        .results-table td {
+            padding: 16px; border-bottom: 1px solid rgba(255,255,255,0.04);
+            color: var(--text);
+        }
+        .results-table tr:hover td { background: rgba(0,240,255,0.02); }
+        .verified {
+            color: #22c55e; font-weight: 700; font-size: 13px;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .hw-badge {
+            display: inline-block; padding: 3px 10px; border-radius: 6px;
+            font-size: 11px; letter-spacing: 1px;
+            background: rgba(0,240,255,0.08); color: var(--accent);
+            border: 1px solid rgba(0,240,255,0.2);
+        }
+
+        /* ═══ COMING SOON CARDS ═══ */
+        .coming-soon {
+            padding: 120px 24px; max-width: 1200px; margin: 0 auto;
+        }
+        .cs-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px; margin-top: 48px;
+        }
+        .cs-card {
+            background: var(--glass-bg); backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border); border-radius: 20px;
+            padding: 40px 32px; position: relative; overflow: hidden;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .cs-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(0,240,255,0.2);
+        }
+        .cs-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, var(--quantum), var(--faceted));
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .cs-card:hover::before { opacity: 1; }
+        .cs-icon {
+            font-size: 36px; margin-bottom: 20px; display: block;
+            filter: saturate(0.8);
+        }
+        .cs-card h3 {
+            font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 12px;
+        }
+        .cs-card p {
+            font-size: 14px; color: var(--text-muted); line-height: 1.7;
+        }
+        .cs-badge {
+            display: inline-block; margin-top: 16px; padding: 4px 12px;
+            border-radius: 100px; font-size: 10px; letter-spacing: 2px;
+            text-transform: uppercase; font-weight: 600;
+        }
+        .badge-quantum { color: var(--quantum); border: 1px solid rgba(0,240,255,0.3); background: rgba(0,240,255,0.06); }
+        .badge-faceted { color: var(--faceted); border: 1px solid rgba(168,85,247,0.3); background: rgba(168,85,247,0.06); }
+        .badge-holo { color: var(--holographic); border: 1px solid rgba(244,63,94,0.3); background: rgba(244,63,94,0.06); }
+        .badge-gold { color: var(--gold); border: 1px solid rgba(196,163,90,0.3); background: rgba(196,163,90,0.06); }
+
+        /* ═══ MOIRE IMAGE SECTION ═══ */
+        .moire-section {
+            padding: 100px 24px; text-align: center;
+        }
+        .moire-section img {
+            max-width: 700px; width: 100%; border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 0 0 80px rgba(0,240,255,0.08);
+            margin-bottom: 40px;
+        }
+        .moire-quote {
+            font-size: clamp(18px, 3vw, 28px); font-weight: 300;
+            color: rgba(255,255,255,0.7); max-width: 700px; margin: 0 auto;
+            line-height: 1.6; font-style: italic;
+        }
+        .moire-quote strong { color: #fff; font-weight: 700; font-style: normal; }
+
+        /* ═══ CTA / FOOTER ═══ */
+        .cta-section {
+            padding: 120px 24px 80px; text-align: center;
+        }
+        .cta-title {
+            font-size: clamp(28px, 5vw, 56px); font-weight: 900; color: #fff;
+            margin-bottom: 24px;
+        }
+        .cta-sub {
+            font-size: 17px; color: var(--text-muted); max-width: 600px;
+            margin: 0 auto 40px; line-height: 1.7;
+        }
+        .cta-btn {
+            display: inline-block; padding: 14px 40px; border-radius: 12px;
+            font-size: 14px; font-weight: 600; letter-spacing: 2px;
+            text-transform: uppercase; text-decoration: none; color: #fff;
+            background: linear-gradient(135deg, rgba(0,240,255,0.2), rgba(168,85,247,0.2));
+            border: 1px solid rgba(0,240,255,0.3);
+            transition: all 0.3s ease; margin: 0 8px;
+        }
+        .cta-btn:hover {
+            background: linear-gradient(135deg, rgba(0,240,255,0.3), rgba(168,85,247,0.3));
+            transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,240,255,0.15);
+        }
+        .cta-btn-ghost {
+            background: transparent; border-color: rgba(255,255,255,0.15);
+        }
+        .cta-btn-ghost:hover {
+            background: rgba(255,255,255,0.05);
+            box-shadow: none;
+        }
+
+        footer {
+            text-align: center; padding: 40px 24px; font-size: 12px;
+            color: rgba(255,255,255,0.2); letter-spacing: 1px;
+            border-top: 1px solid rgba(255,255,255,0.04);
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        /* ── Dividers ── */
+        .divider {
+            height: 120px; position: relative; z-index: 2;
+        }
+        .divider svg { width: 100%; height: 100%; display: block; }
+
+        /* ── Animations ── */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .reveal {
+            opacity: 0; transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .cs-grid { grid-template-columns: 1fr; }
+            .results-table { font-size: 12px; }
+            .results-table th, .results-table td { padding: 10px 8px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="bgCanvas"></canvas>
+    <svg class="noise-overlay" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+        <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter>
+        <rect width="100%" height="100%" filter="url(#n)"/>
+    </svg>
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- ═══ HERO ═══ -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-badge">Clear Seas Solutions LLC &mdash; March 2026</span>
+            <h1 class="hero-title">
+                The <span class="accent">Post-Quantum</span> Era<br>Starts Here
+            </h1>
+            <p class="hero-sub">
+                Novel non-generative synthetic cognition. Optical and quantum parity with binary.
+                Swarm lattice agentic intelligence. The OHUI Post-Quantum Secure Internet Protocol.
+                Solo-developed by a philosopher in a basement.
+            </p>
+            <div class="hero-scroll">
+                <span>Scroll to explore</span>
+                <div class="scroll-line"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ Q-DAY HARDWARE RESULTS ═══ -->
+    <section class="results reveal">
+        <span class="section-label">Q-Day Prize Submission</span>
+        <h2 class="section-title">3 ECC Keys Broken on<br>IBM Quantum Hardware</h2>
+        <p class="section-desc">
+            Shor's algorithm for ECDLP, executed on a 156-qubit Heron r2 processor.
+            Secret keys recovered and verified. Gate-level circuits included.
+        </p>
+        <div class="glass" style="padding: 8px; border-radius: 16px; overflow-x: auto;">
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Target</th>
+                        <th>Curve</th>
+                        <th>Secret Key</th>
+                        <th>Gate Depth</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1-bit</strong></td>
+                        <td>y&sup2;=x&sup3;+x / GF(3)</td>
+                        <td>k = 1</td>
+                        <td>13,638</td>
+                        <td>22.7s</td>
+                        <td><span class="verified">Verified</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>2-bit</strong></td>
+                        <td>y&sup2;=x&sup3;+x+1 / GF(5)</td>
+                        <td>k = 1</td>
+                        <td>230,470</td>
+                        <td>77.0s</td>
+                        <td><span class="verified">Verified</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>3-bit</strong></td>
+                        <td>y&sup2;=x&sup3;+2x+3 / GF(7)</td>
+                        <td>k = 2</td>
+                        <td>36,995</td>
+                        <td>20.4s</td>
+                        <td><span class="verified">Verified</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p style="margin-top: 16px; font-size: 13px; color: var(--text-muted);">
+            <span class="hw-badge">ibm_fez &mdash; 156 Qubit Heron r2</span>
+            &nbsp; All circuits compiled to native SX/RZ/CZ gate set. 4,096 shots per run.
+        </p>
+    </section>
+
+    <!-- ═══ DIVIDER ═══ -->
+    <div class="divider">
+        <svg viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,0 C360,100 720,100 1080,40 L1440,80 L1440,120 L0,120 Z" fill="var(--bg)" opacity="0.7"/>
+        </svg>
+    </div>
+
+    <!-- ═══ COMING SOON ═══ -->
+    <section class="coming-soon reveal">
+        <span class="section-label">Launching Soon</span>
+        <h2 class="section-title">Technology Stack</h2>
+        <p class="section-desc">
+            We have a great deal of technology to introduce to the post-quantum world.
+            We will be licensing this technology and are looking for partners to help scale
+            what is, frankly, a paradigm shift.
+        </p>
+        <div class="cs-grid">
+            <div class="cs-card">
+                <span class="cs-icon" aria-hidden="true">&#x1f9e0;</span>
+                <h3>Non-Generative Synthetic Cognition</h3>
+                <p>The world's first AI architecture that is not based on neural networks or statistical learning. Built on algebraic-geometric structure inside the E8 exceptional root lattice. Deterministic. Explainable. Novel.</p>
+                <span class="cs-badge badge-quantum">Coming Soon</span>
+            </div>
+            <div class="cs-card">
+                <span class="cs-icon" aria-hidden="true">&#x1f50d;</span>
+                <h3>Optical &amp; Quantum Parity with Binary</h3>
+                <p>A codec framework achieving parity between optical, quantum, and classical binary computation. Cross-parity encoding that bridges fundamentally different information substrates.</p>
+                <span class="cs-badge badge-faceted">Coming Soon</span>
+            </div>
+            <div class="cs-card">
+                <span class="cs-icon" aria-hidden="true">&#x1f578;&#xfe0f;</span>
+                <h3>Swarm Lattice Agentic Cognition</h3>
+                <p>Algorithmic swarm intelligence coordinated through lattice geometry. Agents that reason through geometric structure rather than token prediction. Emergent collective computation.</p>
+                <span class="cs-badge badge-holo">Coming Soon</span>
+            </div>
+            <div class="cs-card">
+                <span class="cs-icon" aria-hidden="true">&#x1f512;</span>
+                <h3>OHUI Post-Quantum Internet Protocol</h3>
+                <p>A secure internet protocol designed from the ground up for the post-quantum era. Not a patch on existing infrastructure &mdash; a rethinking of how information moves through networks.</p>
+                <span class="cs-badge badge-gold">Coming Soon</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ MOIRE ENGINE ═══ -->
+    <section class="moire-section reveal">
+        <img src="dialectical_moire_engine.png" alt="Dialectical Moire Engine — Family V Apex Architecture" onerror="this.style.display='none'">
+        <p class="moire-quote">
+            Later we will show you the <strong>singular in singularity</strong> &mdash;
+            by doing this alone and without institutional support.
+        </p>
+    </section>
+
+    <!-- ═══ CTA ═══ -->
+    <section class="cta-section reveal">
+        <h2 class="cta-title">A Brave New World</h2>
+        <p class="cta-sub">
+            One person. No team. No funding. No institution.
+            Multiple technology families. The quantum code is the part we're giving away.
+            The part we're keeping is the part that matters.
+        </p>
+        <div>
+            <a class="cta-btn" href="https://github.com/Domusgpt/Pauly-Shors-Quantum-Al-Gore-Rhythm">View Q-Day Submission</a>
+            <a class="cta-btn cta-btn-ghost" href="SUBMISSION_WRITEUP.md">Technical Writeup</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025&ndash;2026 <a href="#">Clear Seas Solutions LLC</a> / Paul J. Phillips &middot; All Rights Reserved</p>
+    </footer>
+
+    <script>
+    // ── Animated Background: E8-inspired particle field ──
+    (function() {
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+        let w, h, particles = [], mouse = { x: -1000, y: -1000 };
+
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Create particles in concentric shell pattern (E8 inspired)
+        const shells = [0.15, 0.25, 0.35, 0.45, 0.55, 0.65];
+        const counts = [24, 56, 40, 40, 56, 24]; // E8 shell distribution
+        const colors = ['#00f0ff', '#a855f7', '#f43f5e', '#c4a35a', '#22c55e', '#00f0ff'];
+
+        shells.forEach((r, si) => {
+            for (let i = 0; i < counts[si]; i++) {
+                const angle = (i / counts[si]) * Math.PI * 2 + Math.random() * 0.3;
+                const radius = r * Math.min(w, h) * 0.5;
+                particles.push({
+                    x: w/2 + Math.cos(angle) * radius,
+                    y: h/2 + Math.sin(angle) * radius,
+                    ox: w/2 + Math.cos(angle) * radius,
+                    oy: h/2 + Math.sin(angle) * radius,
+                    r: Math.random() * 1.5 + 0.5,
+                    speed: 0.0003 + Math.random() * 0.0005,
+                    angle: angle,
+                    shell: si,
+                    radius: radius,
+                    color: colors[si],
+                    phase: Math.random() * Math.PI * 2
+                });
+            }
+        });
+
+        document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+
+        let t = 0;
+        function draw() {
+            ctx.clearRect(0, 0, w, h);
+            t += 0.008;
+
+            particles.forEach(p => {
+                p.angle += p.speed;
+                p.x = w/2 + Math.cos(p.angle + Math.sin(t + p.phase) * 0.3) * p.radius;
+                p.y = h/2 + Math.sin(p.angle + Math.cos(t * 0.7 + p.phase) * 0.3) * p.radius;
+
+                // Mouse repulsion
+                const dx = p.x - mouse.x, dy = p.y - mouse.y;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                if (dist < 150) {
+                    const force = (150 - dist) / 150 * 8;
+                    p.x += (dx / dist) * force;
+                    p.y += (dy / dist) * force;
+                }
+
+                const alpha = 0.3 + Math.sin(t * 2 + p.phase) * 0.15;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = alpha;
+                ctx.fill();
+            });
+
+            // Draw connections within same shell
+            ctx.globalAlpha = 0.04;
+            ctx.strokeStyle = '#00f0ff';
+            ctx.lineWidth = 0.5;
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    if (particles[i].shell !== particles[j].shell) continue;
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const d = dx*dx + dy*dy;
+                    if (d < 8000) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            ctx.globalAlpha = 1;
+            requestAnimationFrame(draw);
+        }
+        draw();
+    })();
+
+    // ── Scroll Progress ──
+    window.addEventListener('scroll', () => {
+        const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+        document.getElementById('scrollProgress').style.transform = `scaleX(${pct})`;
+    });
+
+    // ── Reveal on Scroll ──
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
