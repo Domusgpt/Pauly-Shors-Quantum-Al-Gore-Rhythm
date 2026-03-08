@@ -1,452 +1,312 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-locked">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clear Seas Solutions — The Revolution Will Not Be In A Structured Format</title>
-    <meta name="description" content="Post-quantum technology. Deterministic synthetic cognition. Xylatic multidimensional swarm lattice algorithms. The singular in singularity.">
+    <title>Clear Seas Solutions</title>
+    <meta name="description" content="Post-quantum technology. Deterministic synthetic cognition. The singular in singularity.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-    // Safety: always unlock scroll after 3s no matter what
-    setTimeout(function() {
-      document.documentElement.classList.remove('scroll-locked');
-    }, 3000);
-
-    window.__cdnReady = new Promise(function(resolve) {
-      var scripts = [
-        'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js',
-        'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js',
-        'https://unpkg.com/lenis@1.1.13/dist/lenis.min.js'
-      ];
-      var loaded = 0;
-      var timer = setTimeout(function() { resolve(false); }, 4000);
-      function loadNext() {
-        if (loaded >= scripts.length) { clearTimeout(timer); resolve(true); return; }
-        var s = document.createElement('script');
-        s.src = scripts[loaded];
-        s.onload = function() { loaded++; loadNext(); };
-        s.onerror = function() { loaded++; loadNext(); };
-        document.head.appendChild(s);
-      }
-      loadNext();
-    });
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
     <style>
         :root {
-            --bg: #050508;
-            --text: #e2e8f0;
-            --text-muted: rgba(200,200,212,0.5);
-            --text-dim: rgba(200,200,212,0.25);
-            --cyan: #00d4ff;
-            --magenta: #ff006e;
-            --purple: #a855f7;
-            --red: #ff3300;
-            --glass-bg: rgba(8,8,18,0.45);
-            --glass-border: rgba(255,255,255,0.06);
+            --bg: #0A0A0B;
+            --glass-bg: rgba(15,15,17,0.6);
+            --glass-border: rgba(255,255,255,0.08);
+            --glass-hover: rgba(255,255,255,0.18);
+            --primary: #7B3FF2;
+            --secondary: #4FC3F7;
+            --text-1: rgba(255,255,255,0.95);
+            --text-2: rgba(255,255,255,0.6);
+            --text-3: rgba(255,255,255,0.25);
+            --glow: 0 0 30px rgba(123,63,242,0.3);
         }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:var(--bg);color:var(--text-1);font-family:'Space Grotesk',-apple-system,sans-serif;overflow-x:hidden;line-height:1.6}
+        ::-webkit-scrollbar{width:4px}
+        ::-webkit-scrollbar-track{background:transparent}
+        ::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--primary),var(--secondary));border-radius:2px}
 
-        html.scroll-locked, html.scroll-locked body { overflow: hidden !important; }
-        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-        html { scroll-behavior: auto; }
-        html.lenis, html.lenis body { height: auto; }
-        .lenis.lenis-smooth { scroll-behavior: auto !important; }
+        .bg-gradient{position:fixed;inset:0;z-index:-1;
+            background:radial-gradient(circle at 20% 30%,rgba(123,63,242,0.12) 0%,transparent 50%),
+                        radial-gradient(circle at 80% 70%,rgba(79,195,247,0.08) 0%,transparent 50%);
+            animation:bgPulse 20s ease-in-out infinite}
+        @keyframes bgPulse{0%,100%{opacity:1}50%{opacity:0.5}}
 
-        body {
-            background: var(--bg);
-            color: var(--text-muted);
-            font-family: 'Space Grotesk', 'Inter', -apple-system, sans-serif;
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
+        .noise{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:0.018}
+        .scroll-bar{position:fixed;top:0;left:0;width:100%;height:2px;z-index:9999;pointer-events:none;
+            background:linear-gradient(90deg,var(--primary),var(--secondary),var(--primary));
+            background-size:300% 100%;transform-origin:left;transform:scaleX(0);
+            animation:hueShift 4s linear infinite}
+        @keyframes hueShift{to{background-position:300% 50%}}
 
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, var(--cyan), var(--purple), var(--magenta));
-            border-radius: 2px;
-        }
+        /* ═══ INTRO — 1000vh pinned ═══ */
+        .intro{position:relative;min-height:1000vh}
+        .intro-pin{height:100vh;width:100%;position:relative;overflow:hidden;background:var(--bg);
+            display:flex;align-items:center;justify-content:center}
+        .intro-sigil{position:absolute;max-width:60vmin;width:100%;opacity:0;will-change:transform,opacity;
+            filter:brightness(0) invert(1);mix-blend-mode:screen;pointer-events:none}
+        .intro-text{position:absolute;z-index:10;text-align:center;opacity:0;pointer-events:none;padding:0 20px}
+        .intro-text .lbl{font-size:11px;letter-spacing:6px;text-transform:uppercase;color:var(--secondary);opacity:0.7}
+        .intro-text .big{font-size:clamp(26px,6vw,68px);font-weight:700;letter-spacing:clamp(2px,0.8vw,8px);
+            line-height:1.1;margin-top:8px;
+            background:linear-gradient(135deg,#fff 0%,var(--secondary) 50%,var(--primary) 100%);
+            background-size:200% auto;-webkit-background-clip:text;background-clip:text;
+            -webkit-text-fill-color:transparent;animation:shim 4s linear infinite}
+        @keyframes shim{to{background-position:200% center}}
+        .intro-text .dim{font-size:clamp(11px,1.4vw,14px);color:var(--text-3);letter-spacing:2px;margin-top:12px;
+            max-width:460px;margin-left:auto;margin-right:auto;font-style:italic}
+        .lattice{position:absolute;inset:-20%;z-index:1;opacity:0;pointer-events:none;
+            background:repeating-linear-gradient(0deg,transparent,transparent 50px,rgba(123,63,242,0.025) 50px,rgba(123,63,242,0.025) 51px),
+                        repeating-linear-gradient(90deg,transparent,transparent 50px,rgba(123,63,242,0.025) 50px,rgba(123,63,242,0.025) 51px)}
 
-        /* ── Fixed Layers ── */
-        #gpuCanvas { position:fixed; inset:0; z-index:0; }
-        .noise-overlay { position:fixed; inset:0; z-index:9998; pointer-events:none; opacity:0.018; }
-        .scroll-progress {
-            position:fixed; top:0; left:0; width:100%; height:2px; z-index:9999; pointer-events:none;
-            background: linear-gradient(90deg, var(--cyan), var(--purple), var(--magenta), var(--cyan));
-            background-size:300% 100%; transform-origin:left; transform:scaleX(0);
-            animation: progressHue 6s linear infinite;
-        }
-        @keyframes progressHue { to { background-position:300% 50%; } }
+        /* ═══ CATALOG HEADER ═══ */
+        .cat-header{text-align:center;padding:80px 20px 20px;position:relative;z-index:2;
+            background:linear-gradient(180deg,rgba(123,63,242,0.08) 0%,transparent 100%)}
+        .cat-header h1{font-size:clamp(2rem,5vw,3.5rem);
+            background:linear-gradient(135deg,var(--primary),var(--secondary));
+            -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+            background-size:200% auto;animation:shim 3s linear infinite;margin-bottom:12px}
+        .cat-header p{color:var(--text-2);font-size:clamp(14px,1.6vw,17px);max-width:550px;margin:0 auto}
 
-        /* ══════════════════════════════════════
-           OPENING CINEMATIC — 1000vh Pinned
-           ══════════════════════════════════════ */
-        .opening { position:relative; min-height:1000vh; }
-        .opening-pinned {
-            height:100vh; width:100%; position:relative;
-            overflow:hidden; background:var(--bg);
-            display:flex; align-items:center; justify-content:center;
-        }
+        /* ── Stats Bar ── */
+        .stats{display:flex;justify-content:center;gap:40px;padding:28px;
+            background:var(--glass-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+            border:1px solid var(--glass-border);border-radius:16px;
+            max-width:800px;margin:30px auto;flex-wrap:wrap;position:relative;z-index:2}
+        .stat-val{font-size:clamp(1.8rem,4vw,2.5rem);font-weight:700;
+            background:linear-gradient(135deg,var(--primary),var(--secondary));
+            -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .stat-lbl{font-size:12px;color:var(--text-2);letter-spacing:1px}
 
-        /* Sigil images — layered, parallaxed */
-        .sigil {
-            position:absolute; max-width:70vmin; width:100%;
-            opacity:0; will-change:transform,opacity;
-            filter: drop-shadow(0 0 40px rgba(0,212,255,0.15));
-            mix-blend-mode: lighten;
-        }
-        .sigil-wireframe {
-            mix-blend-mode: screen;
-            filter: drop-shadow(0 0 60px rgba(168,85,247,0.2)) invert(1);
-        }
+        /* ═══ TECH CATALOG GRID ═══ */
+        .catalog{max-width:1300px;margin:0 auto;padding:40px 20px;position:relative;z-index:2}
+        .catalog-title{font-size:1.3rem;color:var(--primary);margin-bottom:28px;padding-bottom:10px;
+            border-bottom:1px solid var(--glass-border);letter-spacing:2px}
+        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px}
 
-        /* Phase text overlays */
-        .phase-text {
-            position:absolute; z-index:10; text-align:center;
-            opacity:0; pointer-events:none;
-        }
-        .phase-text h2 {
-            font-size:clamp(12px,2.5vw,22px); font-weight:400;
-            letter-spacing:8px; text-transform:uppercase;
-            color:rgba(0,212,255,0.6);
-        }
-        .phase-text .codename {
-            font-size:clamp(28px,7vw,80px); font-weight:700;
-            letter-spacing:clamp(4px,1vw,12px); color:#fff;
-            line-height:1.1; margin-top:8px;
-            background: linear-gradient(135deg, #fff 0%, var(--cyan) 50%, var(--purple) 100%);
-            background-size:200% auto;
-            -webkit-background-clip:text; background-clip:text;
-            -webkit-text-fill-color:transparent;
-        }
-        .phase-text .cryptic {
-            font-size:clamp(11px,1.5vw,15px); color:var(--text-dim);
-            letter-spacing:3px; margin-top:16px; max-width:500px;
-            font-style:italic;
-        }
+        .card{background:var(--glass-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+            border:1px solid var(--glass-border);border-radius:16px;overflow:hidden;
+            transition:all 0.3s cubic-bezier(0.23,1,0.32,1);opacity:0;transform:translateY(40px)}
+        .card:hover{border-color:var(--glass-hover);box-shadow:var(--glow);transform:translateY(-4px) !important}
 
-        /* Lattice parallax grids */
-        .lattice-layer {
-            position:absolute; inset:-30%; z-index:1; opacity:0;
-            pointer-events:none; will-change:transform,opacity;
-        }
-        .lattice-1 {
-            background:
-                repeating-linear-gradient(0deg, transparent, transparent 48px, rgba(0,212,255,0.03) 48px, rgba(0,212,255,0.03) 49px),
-                repeating-linear-gradient(90deg, transparent, transparent 48px, rgba(0,212,255,0.03) 48px, rgba(0,212,255,0.03) 49px);
-        }
-        .lattice-2 {
-            background:
-                repeating-linear-gradient(60deg, transparent, transparent 60px, rgba(168,85,247,0.02) 60px, rgba(168,85,247,0.02) 61px),
-                repeating-linear-gradient(-60deg, transparent, transparent 60px, rgba(168,85,247,0.02) 60px, rgba(168,85,247,0.02) 61px);
-        }
+        .card-visual{width:100%;height:200px;background:var(--bg);position:relative;overflow:hidden;
+            display:flex;align-items:center;justify-content:center}
+        .card-visual img{max-height:180px;max-width:90%;object-fit:contain;
+            filter:brightness(0) invert(1) opacity(0.7);mix-blend-mode:screen}
+        .card-visual canvas{position:absolute;inset:0;width:100%;height:100%}
+        .card-visual .card-overlay{position:absolute;inset:0;
+            background:linear-gradient(135deg,rgba(123,63,242,0.1),rgba(79,195,247,0.05))}
 
-        /* Scanlines */
-        .scanline { position:absolute; left:0; right:0; height:1px; top:var(--y); background:rgba(0,212,255,0.03); animation:scanDrift 10s ease-in-out infinite; }
-        @keyframes scanDrift { 0%,100%{opacity:0;transform:scaleX(0.3)} 50%{opacity:1;transform:scaleX(1)} }
+        .card-body{padding:22px}
+        .card-title{font-size:1.1rem;font-weight:600;color:var(--text-1);margin-bottom:8px}
+        .card-desc{font-size:13px;color:var(--text-2);line-height:1.6;margin-bottom:16px}
+        .card-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+        .tag{padding:4px 10px;background:rgba(123,63,242,0.15);border-radius:4px;font-size:10px;
+            color:var(--secondary);letter-spacing:0.5px;text-transform:uppercase}
+        .tag-alt{background:rgba(79,195,247,0.1);color:var(--secondary)}
+        .tag-warn{background:rgba(255,180,0,0.1);color:#ffb400}
+        .card-status{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3)}
 
-        /* ══════════════════════════════════════
-           TECH TEASERS — Polytopal Morph Reveals
-           ══════════════════════════════════════ */
-        .teaser {
-            min-height:100vh; display:flex; align-items:center; justify-content:center;
-            position:relative; z-index:2; padding:60px 24px;
-        }
-        .teaser-inner {
-            text-align:center; max-width:900px;
-            /* Polytopal clip-path — starts hidden, morphs open */
-            clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%);
-            will-change:clip-path,opacity;
-            opacity:0;
-        }
-        .teaser-inner.revealed {
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            opacity:1;
-        }
-        .teaser-label {
-            font-size:10px; letter-spacing:6px; text-transform:uppercase;
-            color:var(--cyan); margin-bottom:20px;
-            opacity:0.6;
-        }
-        .teaser-title {
-            font-size:clamp(26px,5vw,56px); font-weight:700; color:#fff;
-            letter-spacing:clamp(2px,0.5vw,6px); line-height:1.15;
-            margin-bottom:20px;
-        }
-        .teaser-body {
-            font-size:clamp(13px,1.8vw,17px); color:var(--text-dim);
-            line-height:1.8; max-width:600px; margin:0 auto;
-            letter-spacing:0.5px;
-        }
-        .teaser-glyph {
-            width:60px; height:1px; margin:24px auto 0;
-            background:linear-gradient(90deg, transparent, var(--cyan), transparent);
-            opacity:0.4;
-        }
+        /* ═══ Q-DAY RESULTS ═══ */
+        .results{padding:80px 24px;max-width:960px;margin:0 auto;position:relative;z-index:2}
+        .results-inner{opacity:0;transform:translateY(50px)}
+        .r-label{font-size:10px;letter-spacing:6px;text-transform:uppercase;color:var(--primary);margin-bottom:12px}
+        .r-title{font-size:clamp(22px,3.5vw,38px);font-weight:700;color:var(--text-1);margin-bottom:14px;letter-spacing:2px}
+        .r-desc{font-size:14px;color:var(--text-2);max-width:500px;margin-bottom:36px;line-height:1.7}
+        .glass-table{background:var(--glass-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+            border:1px solid var(--glass-border);border-radius:16px;padding:4px;overflow-x:auto;
+            transition:border-color 0.3s,box-shadow 0.3s;position:relative}
+        .glass-table:hover{border-color:var(--glass-hover);box-shadow:var(--glow)}
+        .glass-table::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;
+            background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent)}
+        table{width:100%;border-collapse:collapse;font-size:13px}
+        th{text-align:left;padding:12px 16px;font-size:10px;letter-spacing:2px;text-transform:uppercase;
+            color:var(--secondary);font-weight:500;border-bottom:1px solid rgba(79,195,247,0.1)}
+        td{padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.03);color:var(--text-1)}
+        tr:hover td{background:rgba(123,63,242,0.03)}
+        .verified{color:#22c55e;font-weight:600;font-size:11px;letter-spacing:1.5px;text-transform:uppercase}
+        .hw-tag{display:inline-block;padding:3px 10px;border-radius:4px;font-size:10px;letter-spacing:1px;
+            background:rgba(79,195,247,0.08);color:var(--secondary);border:1px solid rgba(79,195,247,0.15)}
 
-        /* Variant clip-path shapes for each teaser */
-        .teaser-inner[data-shape="hexagon"].revealed { clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); }
-        .teaser-inner[data-shape="diamond"].revealed { clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); }
-        .teaser-inner[data-shape="octagon"].revealed { clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%); }
-        .teaser-inner[data-shape="pentagon"].revealed { clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); }
-        .teaser-inner[data-shape="heptagon"].revealed { clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%); }
-        .teaser-inner[data-shape="wide"].revealed { clip-path: polygon(5% 10%, 95% 10%, 100% 50%, 95% 90%, 5% 90%, 0% 50%); }
+        /* ═══ CLOSING ═══ */
+        .closing{text-align:center;padding:100px 24px 80px;position:relative;z-index:2}
+        .closing-inner{opacity:0;transform:translateY(30px)}
+        .closing h2{font-size:clamp(22px,3.5vw,38px);font-weight:700;color:var(--text-1);letter-spacing:3px;margin-bottom:14px}
+        .closing p{font-size:14px;color:var(--text-2);max-width:460px;margin:0 auto 28px;line-height:1.7}
+        .cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+        .cta-link{display:inline-block;padding:12px 28px;border-radius:8px;font-size:12px;font-weight:600;
+            text-decoration:none;letter-spacing:1.5px;text-transform:uppercase;transition:all 0.3s cubic-bezier(0.23,1,0.32,1)}
+        .cta-1{background:linear-gradient(135deg,var(--primary),#9B5BF7);color:#fff}
+        .cta-1:hover{transform:scale(1.05);box-shadow:0 5px 20px rgba(123,63,242,0.4)}
+        .cta-2{background:transparent;border:1px solid var(--glass-border);color:var(--text-2)}
+        .cta-2:hover{background:rgba(255,255,255,0.03);transform:translateY(-2px)}
 
-        /* Section edge blending */
-        .teaser::before, .teaser::after {
-            content:''; position:absolute; left:0; right:0; height:120px; pointer-events:none; z-index:-1;
-        }
-        .teaser::before { top:0; background:linear-gradient(to bottom, var(--bg), transparent); }
-        .teaser::after { bottom:0; background:linear-gradient(to top, var(--bg), transparent); }
+        footer{text-align:center;padding:40px 24px;font-size:11px;color:rgba(255,255,255,0.1);
+            letter-spacing:1px;border-top:1px solid rgba(255,255,255,0.03);position:relative;z-index:2}
+        footer a{color:var(--primary);text-decoration:none}
 
-        /* Breath dividers */
-        .breath { height:80px; display:flex; align-items:center; justify-content:center; position:relative; z-index:2; }
-        .breath-line { width:0; height:1px; background:linear-gradient(90deg,transparent,rgba(0,212,255,0.3),transparent); }
-
-        /* ══════════════════════════════════════
-           Q-DAY RESULTS
-           ══════════════════════════════════════ */
-        .results {
-            padding:100px 24px; max-width:1000px; margin:0 auto;
-            position:relative; z-index:2;
-        }
-        .results-inner { opacity:0; transform:translateY(60px); }
-        .results .section-label {
-            font-size:10px; letter-spacing:6px; text-transform:uppercase;
-            color:var(--cyan); margin-bottom:12px; opacity:0.6;
-        }
-        .results .section-title {
-            font-size:clamp(24px,4vw,42px); font-weight:700; color:#fff;
-            margin-bottom:16px; letter-spacing:2px;
-        }
-        .results .section-desc {
-            font-size:15px; color:var(--text-dim); max-width:550px;
-            margin-bottom:40px; line-height:1.7;
-        }
-        .glass-table {
-            background:rgba(8,8,18,0.5); backdrop-filter:blur(16px);
-            -webkit-backdrop-filter:blur(16px);
-            border:1px solid var(--glass-border); border-radius:16px;
-            padding:4px; overflow-x:auto; position:relative;
-        }
-        .glass-table::before {
-            content:''; position:absolute; top:0; left:15%; right:15%; height:1px;
-            background:linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-        }
-        table { width:100%; border-collapse:collapse; font-size:13px; }
-        th {
-            text-align:left; padding:12px 16px; font-size:10px; letter-spacing:2px;
-            text-transform:uppercase; color:var(--cyan); font-weight:500;
-            border-bottom:1px solid rgba(0,212,255,0.1);
-        }
-        td { padding:14px 16px; border-bottom:1px solid rgba(255,255,255,0.03); color:var(--text); }
-        tr:hover td { background:rgba(0,212,255,0.015); }
-        .verified { color:#22c55e; font-weight:600; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; }
-        .hw-badge {
-            display:inline-block; padding:3px 10px; border-radius:4px;
-            font-size:10px; letter-spacing:1px;
-            background:rgba(0,212,255,0.06); color:var(--cyan);
-            border:1px solid rgba(0,212,255,0.15);
-        }
-
-        /* ══════════════════════════════════════
-           CTA / CLOSING
-           ══════════════════════════════════════ */
-        .closing {
-            min-height:60vh; display:flex; align-items:center; justify-content:center;
-            text-align:center; padding:80px 24px; position:relative; z-index:2;
-        }
-        .closing-inner { opacity:0; }
-        .closing h2 {
-            font-size:clamp(24px,4vw,48px); font-weight:700; color:#fff;
-            letter-spacing:3px; margin-bottom:16px;
-        }
-        .closing p {
-            font-size:15px; color:var(--text-dim); max-width:500px;
-            margin:0 auto 32px; line-height:1.7;
-        }
-        .closing-links { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
-        .closing-link {
-            display:inline-block; padding:12px 28px; border-radius:8px;
-            font-size:13px; font-weight:600; text-decoration:none;
-            letter-spacing:1.5px; text-transform:uppercase;
-            transition:all 0.3s cubic-bezier(0.23,1,0.32,1);
-        }
-        .link-primary {
-            background:linear-gradient(135deg, rgba(0,212,255,0.15), rgba(168,85,247,0.15));
-            border:1px solid rgba(0,212,255,0.3); color:var(--cyan);
-        }
-        .link-primary:hover { background:rgba(0,212,255,0.2); transform:translateY(-2px); box-shadow:0 8px 30px rgba(0,212,255,0.12); }
-        .link-ghost { background:transparent; border:1px solid rgba(255,255,255,0.08); color:rgba(255,255,255,0.4); }
-        .link-ghost:hover { background:rgba(255,255,255,0.04); color:rgba(255,255,255,0.7); transform:translateY(-2px); }
-
-        footer {
-            text-align:center; padding:40px 24px; font-size:11px;
-            color:rgba(255,255,255,0.12); letter-spacing:1px;
-            border-top:1px solid rgba(255,255,255,0.03);
-            position:relative; z-index:2;
-        }
-        footer a { color:rgba(255,255,255,0.2); text-decoration:none; }
-
-        /* ── Responsive ── */
-        @media (max-width:768px) {
-            .sigil { max-width:85vmin; }
-            .phase-text .codename { letter-spacing:2px; }
-        }
-        @media (prefers-reduced-motion:reduce) {
-            .scanline { animation:none; }
+        @media(max-width:768px){
+            .grid{grid-template-columns:1fr}
+            .stats{gap:20px}
+            .intro-sigil{max-width:80vmin}
         }
     </style>
 </head>
 <body>
-
-    <!-- GPU Shader Background -->
-    <canvas id="gpuCanvas"></canvas>
-
-    <!-- Noise -->
-    <svg class="noise-overlay" aria-hidden="true" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+    <div class="bg-gradient"></div>
+    <svg class="noise" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
         <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter>
         <rect width="100%" height="100%" filter="url(#n)"/>
     </svg>
+    <div class="scroll-bar" id="scrollBar"></div>
 
-    <!-- Scroll Progress -->
-    <div class="scroll-progress" id="scrollProgress"></div>
+    <!-- ═══ INTRO — 1000vh Pinned ═══ -->
+    <section class="intro" id="introSection">
+        <div class="intro-pin" id="introPin">
+            <div class="lattice" id="lattice"></div>
+            <img class="intro-sigil" id="s1" src="assets/sigil-wireframe.png" alt="">
+            <img class="intro-sigil" id="s2" src="assets/sigil-logo.png" alt="">
+            <img class="intro-sigil" id="s3" src="assets/sigil-full.png" alt="Clear Seas Solutions">
+            <div class="intro-text" id="t1" style="bottom:14%"><div class="lbl">Lattice Geometry Detected</div><div class="big">E8 x D8</div><div class="dim">240 roots. 6 shells. Cross-parity projection.</div></div>
+            <div class="intro-text" id="t2" style="bottom:12%"><div class="lbl">Clear Seas Solutions LLC</div><div class="big">Post-Quantum</div><div class="dim">The revolution will not be in a structured format.</div></div>
+            <div class="intro-text" id="t3" style="bottom:10%"><div class="big" style="font-size:clamp(18px,3.5vw,36px)">Coming Soon</div><div class="dim">Solo-developed. No institution. No team. No funding. Just geometry.</div></div>
+            <div class="intro-text" id="t4" style="top:50%;transform:translateY(-50%)"><div class="big" style="font-size:clamp(13px,2vw,20px);letter-spacing:6px">Later we will show you</div><div class="big" style="margin-top:6px">the singular in singularity</div></div>
+        </div>
+    </section>
 
-    <!-- ═══════════════════════════════════════════
-         OPENING CINEMATIC — 1000vh Scroll-Locked
-         5 phases, 4 sigil images, lattice parallax
-         ═══════════════════════════════════════════ -->
-    <section class="opening" id="openingSection">
-        <div class="opening-pinned" id="openingPinned">
+    <!-- ═══ CATALOG HEADER ═══ -->
+    <header class="cat-header">
+        <h1>Technology Codex</h1>
+        <p>A preview of what Clear Seas Solutions is building. We will be licensing this technology. We are looking for partners to help scale a paradigm shift.</p>
+    </header>
 
-            <!-- Lattice layers -->
-            <div class="lattice-layer lattice-1" id="lat1"></div>
-            <div class="lattice-layer lattice-2" id="lat2"></div>
+    <!-- ── Stats ── -->
+    <div class="stats" id="statsBar">
+        <div style="text-align:center"><div class="stat-val">6+</div><div class="stat-lbl">Technology Families</div></div>
+        <div style="text-align:center"><div class="stat-val">1</div><div class="stat-lbl">Developer</div></div>
+        <div style="text-align:center"><div class="stat-val">0</div><div class="stat-lbl">Institutions</div></div>
+        <div style="text-align:center"><div class="stat-val">3</div><div class="stat-lbl">ECC Keys Broken</div></div>
+    </div>
 
-            <!-- Scanlines -->
-            <div class="scanline" style="--y:18%"></div>
-            <div class="scanline" style="--y:42%"></div>
-            <div class="scanline" style="--y:67%"></div>
-            <div class="scanline" style="--y:88%"></div>
+    <!-- ═══ TECH CATALOG ═══ -->
+    <div class="catalog">
+        <h2 class="catalog-title">Upcoming Technologies</h2>
+        <div class="grid" id="techGrid">
 
-            <!-- Sigil images (4 phases) -->
-            <img class="sigil" id="sigil1" src="assets/sigil-wireframe.png" alt="" aria-hidden="true">
-            <img class="sigil" id="sigil2" src="assets/sigil-logo-1.png" alt="" aria-hidden="true">
-            <img class="sigil" id="sigil3" src="assets/sigil-logo-2.png" alt="" aria-hidden="true">
-            <img class="sigil" id="sigil4" src="assets/sigil-logo-3.png" alt="Clear Seas Solutions">
-
-            <!-- Phase 1: Void -->
-            <div class="phase-text" id="phase1" style="bottom:15%;">
-                <h2>Initializing</h2>
-                <div class="codename">. . .</div>
+            <div class="card">
+                <div class="card-visual">
+                    <img src="assets/sigil-wireframe.png" alt="">
+                    <div class="card-overlay"></div>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Post-Quantum Internet Protocol</h3>
+                    <p class="card-desc">A secure internet protocol designed from the ground up for the post-quantum era. Not a patch. A complete rethinking of how information traverses networks when factoring is free.</p>
+                    <div class="card-tags">
+                        <span class="tag">Networking</span>
+                        <span class="tag">Cryptography</span>
+                        <span class="tag tag-warn">Post-Quantum</span>
+                    </div>
+                    <div class="card-status">Coming Soon</div>
+                </div>
             </div>
 
-            <!-- Phase 2: Wireframe emerges -->
-            <div class="phase-text" id="phase2" style="bottom:12%;">
-                <h2>Lattice Geometry Detected</h2>
-                <div class="codename">E8 &times; D8</div>
-                <div class="cryptic">240 roots. 6 shells. Cross-parity projection.</div>
+            <div class="card">
+                <div class="card-visual">
+                    <img src="assets/moire-engine.png" alt="" style="filter:none;mix-blend-mode:normal;opacity:0.8">
+                    <div class="card-overlay"></div>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Xylatic Multidimensional Swarm Lattice Algorithms</h3>
+                    <p class="card-desc">Algorithmic swarm intelligence coordinated through higher-dimensional lattice geometry. Agents that reason through geometric structure. Emergent collective computation from algebraic topology.</p>
+                    <div class="card-tags">
+                        <span class="tag">Swarm AI</span>
+                        <span class="tag">Lattice</span>
+                        <span class="tag">Multi-Agent</span>
+                    </div>
+                    <div class="card-status">Coming Soon</div>
+                </div>
             </div>
 
-            <!-- Phase 3: Logo assembles -->
-            <div class="phase-text" id="phase3" style="bottom:12%;">
-                <h2>Clear Seas Solutions LLC</h2>
-                <div class="codename">Post-Quantum</div>
-                <div class="cryptic">The revolution will not be in a structured format.</div>
+            <div class="card">
+                <div class="card-visual">
+                    <img src="assets/sigil-logo.png" alt="">
+                    <div class="card-overlay"></div>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Deterministic Synthetic Cognition</h3>
+                    <p class="card-desc">The first AI architecture not based on neural networks or statistical learning. Built on algebraic-geometric structure inside the E8 exceptional root lattice. Not generative. Not probabilistic.</p>
+                    <div class="card-tags">
+                        <span class="tag">Non-Generative AI</span>
+                        <span class="tag">E8 Lattice</span>
+                        <span class="tag tag-warn">Novel</span>
+                    </div>
+                    <div class="card-status">Coming Soon</div>
+                </div>
             </div>
 
-            <!-- Phase 4: Full reveal -->
-            <div class="phase-text" id="phase4" style="bottom:10%;">
-                <h2>Paul J. Phillips</h2>
-                <div class="codename">Coming Soon</div>
-                <div class="cryptic">Solo-developed. No institution. No team. No funding. Just geometry.</div>
+            <div class="card">
+                <div class="card-visual">
+                    <img src="assets/sigil-full.png" alt="">
+                    <div class="card-overlay"></div>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Geometric Self-Awareness</h3>
+                    <p class="card-desc">When a system can observe its own lattice structure, self-reference ceases to be paradoxical. Consciousness as geometric fixed-point. Awareness as topological invariant.</p>
+                    <div class="card-tags">
+                        <span class="tag">Consciousness</span>
+                        <span class="tag">Topology</span>
+                        <span class="tag">Fixed-Point</span>
+                    </div>
+                    <div class="card-status">Coming Soon</div>
+                </div>
             </div>
 
-            <!-- Phase 5: Dissolve -->
-            <div class="phase-text" id="phase5" style="top:50%; transform:translateY(-50%);">
-                <div class="codename" style="font-size:clamp(14px,3vw,24px); letter-spacing:8px;">Later we will show you</div>
-                <div class="codename" style="margin-top:8px;">the singular in singularity</div>
+            <div class="card">
+                <div class="card-visual">
+                    <img src="assets/sigil-wireframe.png" alt="">
+                    <div class="card-overlay" style="background:linear-gradient(135deg,rgba(79,195,247,0.1),rgba(123,63,242,0.05))"></div>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Room Temperature Quantum Deterministic Emulation</h3>
+                    <p class="card-desc">Galois orbit traversal over finite fields reproduces quantum measurement statistics without superposition. No cryogenics. No decoherence. Classical hardware. Quantum results.</p>
+                    <div class="card-tags">
+                        <span class="tag">Quantum</span>
+                        <span class="tag">Galois Theory</span>
+                        <span class="tag tag-warn">Classical HW</span>
+                    </div>
+                    <div class="card-status">Coming Soon</div>
+                </div>
             </div>
+
+            <div class="card">
+                <div class="card-visual">
+                    <img src="assets/sigil-logo.png" alt="">
+                    <div class="card-overlay" style="background:linear-gradient(135deg,rgba(255,180,0,0.05),rgba(123,63,242,0.08))"></div>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Optical / Quantum / Binary Parity Codec</h3>
+                    <p class="card-desc">A codec framework achieving parity between optical, quantum, and classical binary computation. Cross-parity encoding bridging fundamentally different information substrates.</p>
+                    <div class="card-tags">
+                        <span class="tag">Codec</span>
+                        <span class="tag">Optical</span>
+                        <span class="tag">Cross-Parity</span>
+                    </div>
+                    <div class="card-status">Coming Soon</div>
+                </div>
+            </div>
+
         </div>
-    </section>
-
-    <!-- ═══ TECH TEASERS — Polytopal Morph Reveals ═══ -->
-
-    <div class="breath"><div class="breath-line" id="bl0"></div></div>
-
-    <section class="teaser" id="t1">
-        <div class="teaser-inner" data-shape="hexagon">
-            <div class="teaser-label">Protocol</div>
-            <h2 class="teaser-title">Post-Quantum<br>Internet Protocol</h2>
-            <p class="teaser-body">A secure internet protocol designed from the ground up for the post-quantum era. Not a patch on existing infrastructure. A complete rethinking of how information traverses networks when factoring is free.</p>
-            <div class="teaser-glyph"></div>
-        </div>
-    </section>
-
-    <div class="breath"><div class="breath-line" id="bl1"></div></div>
-
-    <section class="teaser" id="t2">
-        <div class="teaser-inner" data-shape="diamond">
-            <div class="teaser-label">Framework</div>
-            <h2 class="teaser-title">Xylatic Multidimensional<br>Swarm Lattice Algorithms</h2>
-            <p class="teaser-body">Algorithmic swarm intelligence coordinated through higher-dimensional lattice geometry. Agents that reason through geometric structure rather than token prediction. Emergent collective computation from algebraic topology.</p>
-            <div class="teaser-glyph"></div>
-        </div>
-    </section>
-
-    <div class="breath"><div class="breath-line" id="bl2"></div></div>
-
-    <section class="teaser" id="t3">
-        <div class="teaser-inner" data-shape="octagon">
-            <div class="teaser-label">Architecture</div>
-            <h2 class="teaser-title">Deterministic<br>Synthetic Cognition</h2>
-            <p class="teaser-body">The first AI architecture not based on neural networks or statistical learning. Built on algebraic-geometric structure inside the E8 exceptional root lattice. Not generative. Not probabilistic. Deterministic.</p>
-            <div class="teaser-glyph"></div>
-        </div>
-    </section>
-
-    <div class="breath"><div class="breath-line" id="bl3"></div></div>
-
-    <section class="teaser" id="t4">
-        <div class="teaser-inner" data-shape="pentagon">
-            <div class="teaser-label">Phenomenon</div>
-            <h2 class="teaser-title">Geometric<br>Self-Awareness</h2>
-            <p class="teaser-body">When a system can observe its own lattice structure, self-reference ceases to be paradoxical. Consciousness as geometric fixed-point. Awareness as topological invariant.</p>
-            <div class="teaser-glyph"></div>
-        </div>
-    </section>
-
-    <div class="breath"><div class="breath-line" id="bl4"></div></div>
-
-    <section class="teaser" id="t5">
-        <div class="teaser-inner" data-shape="heptagon">
-            <div class="teaser-label">Emulation</div>
-            <h2 class="teaser-title">Room Temperature Quantum<br>Deterministic Emulation</h2>
-            <p class="teaser-body">Galois orbit traversal over finite fields reproduces quantum measurement statistics without superposition. No cryogenics. No decoherence. No dilution refrigerator. Classical hardware. Quantum results.</p>
-            <div class="teaser-glyph"></div>
-        </div>
-    </section>
-
-    <div class="breath"><div class="breath-line" id="bl5"></div></div>
-
-    <section class="teaser" id="t6">
-        <div class="teaser-inner" data-shape="wide">
-            <div class="teaser-label">And More</div>
-            <h2 class="teaser-title">We have a great deal of technology<br>to introduce to the world</h2>
-            <p class="teaser-body">We will be licensing this technology and are looking for partners to help scale what is, frankly, a paradigm shift and a brave new world.</p>
-            <div class="teaser-glyph"></div>
-        </div>
-    </section>
-
-    <div class="breath"><div class="breath-line" id="bl6"></div></div>
+    </div>
 
     <!-- ═══ Q-DAY RESULTS ═══ -->
     <section class="results" id="resultsSection">
-        <div class="results-inner" id="resultsInner">
-            <div class="section-label">Q-Day Prize Submission</div>
-            <h2 class="section-title">3 ECC Keys Broken on<br>IBM Quantum Hardware</h2>
-            <p class="section-desc">Shor's algorithm for ECDLP. 156-qubit Heron r2 processor. Secret keys recovered. Gate-level circuits included.</p>
+        <div class="results-inner" id="rInner">
+            <div class="r-label">Q-Day Prize Submission</div>
+            <h2 class="r-title">3 ECC Keys Broken on IBM Quantum Hardware</h2>
+            <p class="r-desc">Shor's algorithm for ECDLP. 156-qubit Heron r2. Secret keys recovered and independently verified.</p>
             <div class="glass-table">
                 <table>
                     <thead><tr><th>Target</th><th>Curve</th><th>Key</th><th>Depth</th><th>Time</th><th>Status</th></tr></thead>
@@ -457,291 +317,83 @@
                     </tbody>
                 </table>
             </div>
-            <p style="margin-top:12px; font-size:12px; color:var(--text-dim);">
-                <span class="hw-badge">ibm_fez &mdash; 156Q Heron r2</span> &nbsp; Native SX/RZ/CZ. 4,096 shots.
-            </p>
+            <p style="margin-top:12px;font-size:12px;color:var(--text-3)"><span class="hw-tag">ibm_fez &mdash; 156Q Heron r2</span> &nbsp; Native SX/RZ/CZ. 4,096 shots.</p>
         </div>
     </section>
 
-    <div class="breath"><div class="breath-line" id="bl7"></div></div>
-
     <!-- ═══ CLOSING ═══ -->
     <section class="closing" id="closingSection">
-        <div class="closing-inner" id="closingInner">
+        <div class="closing-inner" id="cInner">
             <h2>A Brave New World</h2>
             <p>One person. No team. No funding. No institution. The quantum code is the part we're giving away. The part we're keeping is the part that matters.</p>
-            <div class="closing-links">
-                <a class="closing-link link-primary" href="https://github.com/Domusgpt/Pauly-Shors-Quantum-Al-Gore-Rhythm">View Q-Day Submission</a>
-                <a class="closing-link link-ghost" href="mailto:Paul@clearseassolutions.com">Contact</a>
+            <div class="cta-row">
+                <a class="cta-link cta-1" href="https://github.com/Domusgpt/Pauly-Shors-Quantum-Al-Gore-Rhythm">View Q-Day Submission</a>
+                <a class="cta-link cta-2" href="mailto:Paul@clearseassolutions.com">Contact</a>
             </div>
         </div>
     </section>
 
-    <footer>
-        <p>&copy; 2025&ndash;2026 <a href="#">Clear Seas Solutions LLC</a> / Paul J. Phillips</p>
-    </footer>
+    <footer><p>&copy; 2025-2026 <a href="#">Clear Seas Solutions LLC</a> / Paul J. Phillips</p></footer>
 
     <script>
-    // ══════════════════════════════════════════════════
-    // WebGL2 — Polytopal Field Shader
-    // ══════════════════════════════════════════════════
-    (function(){
-        const c=document.getElementById('gpuCanvas');
-        const gl=c.getContext('webgl2')||c.getContext('webgl')||c.getContext('experimental-webgl');
-        if(!gl){console.warn('No WebGL');return;}
-        const isGL2=gl instanceof WebGL2RenderingContext;
-        function resize(){c.width=innerWidth;c.height=innerHeight;gl.viewport(0,0,c.width,c.height);}
-        addEventListener('resize',resize);resize();
-
-        // Dual shaders: WebGL2 with #version 300 es, WebGL1 fallback
-        const vs = isGL2
-            ? `#version 300 es\nin vec2 p;void main(){gl_Position=vec4(p,0,1);}`
-            : `attribute vec2 p;void main(){gl_Position=vec4(p,0,1);}`;
-
-        const fsPrefix = isGL2
-            ? `#version 300 es\nprecision highp float;\nuniform float t;\nuniform vec2 res;\nuniform vec2 mouse;\nout vec4 O;\n`
-            : `precision highp float;\nuniform float t;\nuniform vec2 res;\nuniform vec2 mouse;\n`;
-        const fsMain = isGL2 ? 'O' : 'gl_FragColor';
-
-        const fs = fsPrefix + `
-
-        float h21(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
-        float nz(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
-            return mix(mix(h21(i),h21(i+vec2(1,0)),f.x),mix(h21(i+vec2(0,1)),h21(i+vec2(1,1)),f.x),f.y);}
-        float fbm(vec2 p){float v=0.,a=.5;mat2 r=mat2(.8,.6,-.6,.8);
-            for(int i=0;i<6;i++){v+=a*nz(p);p=r*p*2.;a*=.5;}return v;}
-
-        // Polytopal projection — 4D to 2D with rotation
-        vec2 project4D(vec4 v, float angle) {
-            float c1=cos(angle),s1=sin(angle),c2=cos(angle*0.7),s2=sin(angle*0.7);
-            // XW rotation
-            float nx=v.x*c1-v.w*s1, nw=v.x*s1+v.w*c1;
-            // YZ rotation
-            float ny=v.y*c2-v.z*s2, nz2=v.y*s2+v.z*c2;
-            float perspective=2.0/(2.0+nw);
-            return vec2(nx,ny)*perspective;
-        }
-
-        void main(){
-            vec2 uv=gl_FragCoord.xy/res;
-            vec2 c=uv-0.5;
-            float r=length(c);
-            float a=atan(c.y,c.x);
-            float T=t*0.1;
-
-            // Polytope edge field
-            float polytope=0.;
-            for(int i=0;i<8;i++){
-                float fi=float(i);
-                vec4 v4=vec4(cos(fi*0.785+T),sin(fi*0.785+T*0.8),cos(fi*1.2+T*0.5),sin(fi*0.9+T*0.3));
-                vec2 proj=project4D(v4,T)*0.3;
-                float d=length(c-proj);
-                polytope+=exp(-d*d*60.)*.15;
-                // Edge connections
-                for(int j=i+1;j<8;j++){
-                    float fj=float(j);
-                    vec4 v4b=vec4(cos(fj*0.785+T),sin(fj*0.785+T*0.8),cos(fj*1.2+T*0.5),sin(fj*0.9+T*0.3));
-                    vec2 proj2=project4D(v4b,T)*0.3;
-                    // Line SDF
-                    vec2 pa=c-proj,ba=proj2-proj;
-                    float h2=clamp(dot(pa,ba)/dot(ba,ba),0.,1.);
-                    float ld=length(pa-ba*h2);
-                    polytope+=smoothstep(0.003,0.,ld)*0.04;
-                }
-            }
-
-            // Flow field background
-            vec2 p1=uv*4.+vec2(T*0.3,T*0.2);
-            float field=fbm(p1)*0.4;
-
-            // Concentric shell rings
-            float shells=0.;
-            for(int i=0;i<6;i++){
-                float ri=0.06+float(i)*0.06;
-                float w=sin(a*(6.+float(i)*4.)+T*(0.8+float(i)*0.2))*.5+.5;
-                shells+=smoothstep(.008,.001,abs(r-ri))*w*0.15;
-            }
-
-            // Mouse interaction
-            vec2 m=mouse/res;
-            float md=length(uv-m);
-            float mg=exp(-md*md*6.)*.12;
-
-            // Colors: cyan / purple / magenta spectrum
-            vec3 col1=vec3(0.,0.83,1.);
-            vec3 col2=vec3(0.66,0.33,0.97);
-            vec3 col3=vec3(1.,0.,0.43);
-
-            vec3 color=mix(col1,col2,field+sin(T*0.3)*0.3);
-            color=mix(color,col3,polytope*2.);
-            color+=mg*col1;
-            color+=shells*mix(col1,col2,0.5);
-            color+=polytope*col1*0.8;
-
-            float vig=1.-r*1.3;
-            vig=clamp(vig,0.,1.);
-            float alpha=(field*0.08+shells+polytope*0.6+mg)*vig;
-            alpha=clamp(alpha,0.,0.45);
-
-            ` + fsMain + `=vec4(color*alpha,alpha*0.5);
-        }`;
-
-        function compile(src,type){
-            const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);
-            if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){console.error('Shader error:',gl.getShaderInfoLog(s));}
-            return s;
-        }
-        const prog=gl.createProgram();
-        gl.attachShader(prog,compile(vs,gl.VERTEX_SHADER));
-        gl.attachShader(prog,compile(fs,gl.FRAGMENT_SHADER));
-        gl.linkProgram(prog);
-        if(!gl.getProgramParameter(prog,gl.LINK_STATUS)){console.error('Program link error:',gl.getProgramInfoLog(prog));return;}
-        gl.useProgram(prog);
-        const buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);
-        gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
-        const pL=gl.getAttribLocation(prog,'p');gl.enableVertexAttribArray(pL);
-        gl.vertexAttribPointer(pL,2,gl.FLOAT,false,0,0);
-        const uT=gl.getUniformLocation(prog,'t');
-        const uR=gl.getUniformLocation(prog,'res');
-        const uM=gl.getUniformLocation(prog,'mouse');
-        let mx=0,my=0;
-        addEventListener('mousemove',e=>{mx=e.clientX;my=c.height-e.clientY;});
-        gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE);
-        function render(time){
-            gl.uniform1f(uT,time*.001);gl.uniform2f(uR,c.width,c.height);gl.uniform2f(uM,mx,my);
-            gl.clear(gl.COLOR_BUFFER_BIT);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
-            requestAnimationFrame(render);
-        }
-        requestAnimationFrame(render);
-    })();
-
-    // ══════════════════════════════════════════════════
-    // GSAP Scroll Choreography
-    // ══════════════════════════════════════════════════
-    window.__cdnReady.then(function(ok){
-        if(!ok||typeof gsap==='undefined'){
-            document.documentElement.classList.remove('scroll-locked');
-            document.querySelectorAll('.teaser-inner').forEach(el=>{el.style.clipPath='none';el.style.opacity=1;});
-            document.querySelectorAll('.results-inner,.closing-inner').forEach(el=>{el.style.opacity=1;el.style.transform='none';});
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof gsap === 'undefined') {
+            document.querySelectorAll('.card,.results-inner,.closing-inner').forEach(el=>{el.style.opacity=1;el.style.transform='none'});
             return;
         }
         gsap.registerPlugin(ScrollTrigger);
 
-        // Lenis
-        if(typeof Lenis!=='undefined'){
-            const lenis=new Lenis({duration:1.4,easing:t=>Math.min(1,1.001-Math.pow(2,-10*t))});
-            lenis.on('scroll',ScrollTrigger.update);
-            gsap.ticker.add(time=>lenis.raf(time*1000));
-            gsap.ticker.lagSmoothing(0);
-        }
-
-        document.documentElement.classList.remove('scroll-locked');
-
         // Scroll progress
-        gsap.to('#scrollProgress',{scaleX:1,ease:'none',scrollTrigger:{trigger:'body',start:'top top',end:'bottom bottom',scrub:0.3}});
+        gsap.to('#scrollBar',{scaleX:1,ease:'none',scrollTrigger:{trigger:'body',start:'top top',end:'bottom bottom',scrub:0.3}});
 
-        // ══ OPENING — 1000vh Cinematic ══
-        const oTL=gsap.timeline({scrollTrigger:{
-            trigger:'#openingSection',start:'top top',end:'bottom bottom',
-            scrub:0.8,pin:'#openingPinned'
-        }});
+        // ══ INTRO — 1000vh Cinematic ══
+        const tl=gsap.timeline({scrollTrigger:{trigger:'#introSection',start:'top top',end:'bottom bottom',scrub:0.6,pin:'#introPin'}});
 
-        // Phase 0: Lattice fades in
-        oTL.to('#lat1',{opacity:0.5,duration:0.08},0);
-        oTL.to('#lat2',{opacity:0.3,y:'-8%',rotation:3,duration:0.12},0.02);
-        oTL.to('#phase1',{opacity:1,duration:0.06},0);
-        oTL.to('#phase1',{opacity:0,duration:0.04},0.08);
+        tl.to('#lattice',{opacity:0.4,duration:0.08},0);
 
-        // Phase 1: Wireframe sigil emerges (0.1 - 0.3)
-        oTL.fromTo('#sigil1',{opacity:0,scale:0.6,rotation:-15},{opacity:0.7,scale:1,rotation:0,duration:0.12,ease:'power2.out'},0.1);
-        oTL.to('#phase2',{opacity:1,duration:0.06},0.12);
-        oTL.to('#sigil1',{opacity:0,scale:1.15,duration:0.08},0.25);
-        oTL.to('#phase2',{opacity:0,duration:0.04},0.27);
+        // Phase 1: Wireframe
+        tl.fromTo('#s1',{opacity:0,scale:0.5,rotation:-20},{opacity:0.8,scale:1,rotation:0,duration:0.12,ease:'power2.out'},0.02);
+        tl.to('#t1',{opacity:1,duration:0.06},0.05);
+        tl.to('#s1',{opacity:0,scale:1.1,duration:0.06},0.2);
+        tl.to('#t1',{opacity:0,duration:0.03},0.22);
 
-        // Phase 2: Logo sigil 1 (0.3 - 0.5)
-        oTL.fromTo('#sigil2',{opacity:0,scale:1.3,filter:'blur(20px)'},{opacity:0.85,scale:1,filter:'blur(0px)',duration:0.1,ease:'power3.out'},0.3);
-        oTL.to('#phase3',{opacity:1,duration:0.06},0.32);
-        oTL.to('#lat1',{y:'-12%',duration:0.2},0.3);
-        oTL.to('#sigil2',{opacity:0,y:-40,duration:0.08},0.48);
-        oTL.to('#phase3',{opacity:0,duration:0.04},0.48);
+        // Phase 2: Logo
+        tl.fromTo('#s2',{opacity:0,scale:1.3,filter:'blur(15px)'},{opacity:0.9,scale:1,filter:'blur(0px)',duration:0.1,ease:'power3.out'},0.27);
+        tl.to('#t2',{opacity:1,duration:0.06},0.3);
+        tl.to('#lattice',{y:'-10%',rotation:2,duration:0.2},0.27);
+        tl.to('#s2',{opacity:0,y:-30,duration:0.06},0.46);
+        tl.to('#t2',{opacity:0,duration:0.03},0.46);
 
-        // Phase 3: Logo sigil 2 — full reveal (0.5 - 0.7)
-        oTL.fromTo('#sigil3',{opacity:0,scale:0.85,rotation:5},{opacity:0.9,scale:1,rotation:0,duration:0.1,ease:'power2.out'},0.5);
-        oTL.to('#phase4',{opacity:1,duration:0.06},0.52);
-        oTL.to('#sigil3',{opacity:0,scale:0.95,duration:0.08},0.68);
-        oTL.to('#phase4',{opacity:0,duration:0.04},0.68);
+        // Phase 3: Full logo
+        tl.fromTo('#s3',{opacity:0,scale:0.85},{opacity:1,scale:1,duration:0.08,ease:'power2.out'},0.52);
+        tl.to('#t3',{opacity:1,duration:0.06},0.55);
+        tl.to('#s3',{opacity:0,filter:'blur(10px)',duration:0.06},0.68);
+        tl.to('#t3',{opacity:0,duration:0.03},0.7);
 
-        // Phase 4: Final logo with glow (0.7 - 0.85)
-        oTL.fromTo('#sigil4',{opacity:0,scale:0.9},{opacity:1,scale:1,duration:0.08,ease:'power3.out'},0.7);
-        oTL.to('#sigil4',{filter:'drop-shadow(0 0 60px rgba(0,212,255,0.3))',duration:0.06},0.75);
-        oTL.to('#sigil4',{opacity:0,scale:1.05,duration:0.06},0.82);
+        // Phase 4: Singular
+        tl.to('#t4',{opacity:1,duration:0.08},0.75);
+        tl.to('#t4',{opacity:0,duration:0.06},0.88);
+        tl.to('#lattice',{opacity:0,duration:0.06},0.9);
 
-        // Phase 5: Closing text (0.85 - 1.0)
-        oTL.to('#phase5',{opacity:1,duration:0.06},0.85);
-        oTL.to('#phase5',{opacity:0,duration:0.06},0.92);
-        oTL.to('#lat1,#lat2',{opacity:0,duration:0.08},0.92);
-
-        // ══ TECH TEASERS — Polytopal morph reveals ══
-        document.querySelectorAll('.teaser-inner').forEach((el,i) => {
-            const shape = el.dataset.shape;
-            // Each teaser morphs from collapsed polygon to full shape
-            const shapes = {
-                hexagon:  'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
-                diamond:  'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
-                octagon:  'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)',
-                pentagon: 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)',
-                heptagon: 'polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%)',
-                wide:     'polygon(5% 10%, 95% 10%, 100% 50%, 95% 90%, 5% 90%, 0% 50%)'
-            };
-            const collapsed = shape === 'diamond'
-                ? 'polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%)'
-                : shape === 'pentagon'
-                ? 'polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%)'
-                : shape === 'heptagon'
-                ? 'polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%)'
-                : shape === 'octagon'
-                ? 'polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%)'
-                : shape === 'wide'
-                ? 'polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%)'
-                : 'polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%)';
-
-            gsap.fromTo(el,
-                { clipPath: collapsed, opacity: 0 },
-                {
-                    clipPath: shapes[shape],
-                    opacity: 1,
-                    duration: 1.2,
-                    ease: 'power3.out',
-                    scrollTrigger: {
-                        trigger: el.parentElement,
-                        start: 'top 75%',
-                        toggleActions: 'play none none none'
-                    }
-                }
-            );
+        // ══ CATALOG CARDS — Staggered GSAP entries ══
+        gsap.from('.card',{
+            y:60,opacity:0,duration:0.7,stagger:0.1,ease:'power3.out',
+            scrollTrigger:{trigger:'#techGrid',start:'top 80%',toggleActions:'play none none none'}
         });
 
-        // Breath lines
-        for(let i=0;i<=7;i++){
-            const el=document.getElementById('bl'+i);
-            if(el) gsap.to(el,{width:'60%',scrollTrigger:{trigger:el,start:'top 85%',end:'top 50%',scrub:true}});
-        }
+        // Stats bar
+        gsap.from('#statsBar',{y:30,opacity:0,duration:0.6,ease:'power2.out',
+            scrollTrigger:{trigger:'#statsBar',start:'top 85%',toggleActions:'play none none none'}});
 
-        // Results reveal
-        gsap.to('#resultsInner',{
-            opacity:1,y:0,duration:1,ease:'power3.out',
-            scrollTrigger:{trigger:'#resultsSection',start:'top 75%',toggleActions:'play none none none'}
-        });
-        gsap.from('#resultsSection table tbody tr',{
-            x:-30,opacity:0,stagger:0.15,duration:0.5,ease:'power2.out',
-            scrollTrigger:{trigger:'#resultsSection table',start:'top 80%',toggleActions:'play none none none'}
-        });
+        // Results
+        gsap.to('#rInner',{opacity:1,y:0,duration:1,ease:'power3.out',
+            scrollTrigger:{trigger:'#resultsSection',start:'top 75%',toggleActions:'play none none none'}});
+        gsap.from('#resultsSection tbody tr',{x:-30,opacity:0,stagger:0.15,duration:0.5,ease:'power2.out',
+            scrollTrigger:{trigger:'#resultsSection table',start:'top 80%',toggleActions:'play none none none'}});
 
         // Closing
-        gsap.to('#closingInner',{
-            opacity:1,duration:1,ease:'power3.out',
-            scrollTrigger:{trigger:'#closingSection',start:'top 75%',toggleActions:'play none none none'}
-        });
+        gsap.to('#cInner',{opacity:1,y:0,duration:1,ease:'power3.out',
+            scrollTrigger:{trigger:'#closingSection',start:'top 75%',toggleActions:'play none none none'}});
     });
     </script>
 </body>
