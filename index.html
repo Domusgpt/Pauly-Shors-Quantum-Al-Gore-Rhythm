@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clear Seas Solutions — Post-Quantum Technology</title>
+    <meta name="description" content="Novel non-generative synthetic cognition, post-quantum cryptography, and the OHUI Secure Internet Protocol. Solo-developed by Paul J. Phillips.">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+    <style>
+        :root {
+            --bg: #030712;
+            --text: #e2e8f0;
+            --text-muted: rgba(200,200,212,0.45);
+            --accent: #00f0ff;
+            --quantum: #00f0ff;
+            --faceted: #a855f7;
+            --holographic: #f43f5e;
+            --gold: #c4a35a;
+            --glass-bg: rgba(255,255,255,0.04);
+            --glass-border: rgba(255,255,255,0.08);
+        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: auto; /* Lenis handles smooth scroll */ }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ── Canvas Background ── */
+        #bgCanvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; opacity: 0.6;
+        }
+
+        /* ── Noise Overlay ── */
+        .noise-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; opacity: 0.03; pointer-events: none;
+        }
+
+        /* ── Mouse Glow ── */
+        .mouse-glow {
+            position: fixed; width: 600px; height: 600px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,240,255,0.06) 0%, transparent 70%);
+            pointer-events: none; z-index: 1; transform: translate(-50%, -50%);
+            transition: opacity 0.3s;
+        }
+
+        /* ── Scroll Progress ── */
+        .scroll-progress {
+            position: fixed; top: 0; left: 0; width: 100%; height: 3px; z-index: 9999;
+            background: linear-gradient(90deg, var(--quantum), var(--faceted), var(--holographic), var(--quantum));
+            background-size: 300% 100%;
+            transform-origin: left; transform: scaleX(0);
+            animation: progressHue 6s linear infinite;
+        }
+        @keyframes progressHue { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
+
+        /* ── Crescendo Vignette ── */
+        .crescendo-vignette {
+            position: fixed; inset: 0; z-index: 2; pointer-events: none;
+            background: radial-gradient(ellipse at center, transparent 40%, rgba(0,240,255,0.03) 100%);
+            opacity: 0;
+        }
+
+        /* ── Glass Cards ── */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+        }
+
+        /* ── Sections ── */
+        section { position: relative; z-index: 2; }
+
+        /* ═══ HERO ═══ */
+        .hero {
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            text-align: center; padding: 80px 24px;
+        }
+        .hero-content { max-width: 900px; }
+        .hero-badge {
+            display: inline-block; padding: 6px 20px;
+            border: 1px solid rgba(0,240,255,0.35); border-radius: 100px;
+            font-size: 11px; color: var(--accent); letter-spacing: 3px;
+            text-transform: uppercase; margin-bottom: 32px;
+            backdrop-filter: blur(8px); background: rgba(0,240,255,0.04);
+            opacity: 0; transform: translateY(-20px);
+        }
+        .hero-title {
+            font-size: clamp(36px, 8vw, 90px); font-weight: 900;
+            letter-spacing: 4px; line-height: 1.05; color: #fff;
+            opacity: 0;
+        }
+        .hero-title .accent { color: var(--accent); }
+        .hero-title .char {
+            display: inline-block; opacity: 0; transform: translateY(60px) rotateX(40deg);
+        }
+        .hero-sub {
+            font-size: clamp(15px, 2vw, 20px); color: var(--text-muted);
+            max-width: 650px; margin: 28px auto 0; line-height: 1.8;
+            opacity: 0; transform: translateY(30px);
+        }
+        .hero-scroll {
+            margin-top: 60px; font-size: 11px; letter-spacing: 4px;
+            text-transform: uppercase; color: rgba(255,255,255,0.2);
+            opacity: 0;
+        }
+        .scroll-line {
+            width: 1px; height: 60px; background: linear-gradient(to bottom, rgba(0,240,255,0.4), transparent);
+            margin: 12px auto 0;
+        }
+
+        /* ── Text shimmer ── */
+        .text-shimmer {
+            background: linear-gradient(90deg, #fff 0%, var(--accent) 30%, #fff 60%, var(--faceted) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 4s linear infinite;
+        }
+        @keyframes shimmer { to { background-position: 200% center; } }
+
+        /* ═══ Q-DAY RESULTS ═══ */
+        .results {
+            padding: 120px 24px; max-width: 1100px; margin: 0 auto;
+        }
+        .section-label {
+            font-size: 11px; letter-spacing: 5px; text-transform: uppercase;
+            color: var(--accent); margin-bottom: 16px;
+            opacity: 0; transform: translateX(-30px);
+        }
+        .section-title {
+            font-size: clamp(28px, 5vw, 52px); font-weight: 800; color: #fff;
+            margin-bottom: 20px; line-height: 1.15;
+            opacity: 0; transform: translateY(40px);
+        }
+        .section-desc {
+            font-size: 17px; color: var(--text-muted); max-width: 600px;
+            margin-bottom: 48px; line-height: 1.7;
+            opacity: 0; transform: translateY(30px);
+        }
+
+        /* Results Table */
+        .results-table-wrap {
+            opacity: 0; transform: translateY(50px) scale(0.98);
+        }
+        .results-table {
+            width: 100%; border-collapse: collapse; font-size: 14px;
+        }
+        .results-table th {
+            text-align: left; padding: 14px 16px; font-size: 11px; letter-spacing: 2px;
+            text-transform: uppercase; color: var(--accent);
+            border-bottom: 1px solid rgba(0,240,255,0.15);
+        }
+        .results-table td {
+            padding: 16px; border-bottom: 1px solid rgba(255,255,255,0.04);
+            color: var(--text);
+        }
+        .results-table tr { opacity: 0; transform: translateX(-30px); }
+        .results-table tr:hover td { background: rgba(0,240,255,0.02); }
+        .verified {
+            color: #22c55e; font-weight: 700; font-size: 13px;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .hw-badge {
+            display: inline-block; padding: 3px 10px; border-radius: 6px;
+            font-size: 11px; letter-spacing: 1px;
+            background: rgba(0,240,255,0.08); color: var(--accent);
+            border: 1px solid rgba(0,240,255,0.2);
+        }
+        .results-meta {
+            margin-top: 16px; font-size: 13px; color: var(--text-muted);
+            opacity: 0;
+        }
+
+        /* ═══ BREATH LINE DIVIDER ═══ */
+        .breath-divider {
+            height: 200px; position: relative; z-index: 2;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .breath-line {
+            width: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), var(--faceted), transparent);
+        }
+
+        /* ═══ COMING SOON CARDS ═══ */
+        .coming-soon {
+            padding: 120px 24px; max-width: 1200px; margin: 0 auto;
+        }
+        .cs-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px; margin-top: 48px;
+        }
+        .cs-card {
+            background: var(--glass-bg); backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border); border-radius: 20px;
+            padding: 40px 32px; position: relative; overflow: hidden;
+            transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), border-color 0.3s ease, box-shadow 0.4s ease;
+            opacity: 0; transform: translateY(80px) scale(0.92);
+        }
+        .cs-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            border-color: rgba(0,240,255,0.25);
+            box-shadow: 0 20px 60px rgba(0,240,255,0.08), 0 0 40px rgba(168,85,247,0.05);
+        }
+        .cs-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, var(--quantum), var(--faceted));
+            transform: scaleX(0); transform-origin: left;
+            transition: transform 0.4s cubic-bezier(0.23,1,0.32,1);
+        }
+        .cs-card:hover::before { transform: scaleX(1); }
+        .cs-card::after {
+            content: ''; position: absolute; inset: 0; border-radius: 20px;
+            background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(0,240,255,0.06) 0%, transparent 60%);
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .cs-card:hover::after { opacity: 1; }
+        .cs-icon {
+            font-size: 36px; margin-bottom: 20px; display: block;
+            filter: saturate(0.8);
+        }
+        .cs-card h3 {
+            font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 12px;
+        }
+        .cs-card p {
+            font-size: 14px; color: var(--text-muted); line-height: 1.7;
+        }
+        .cs-badge {
+            display: inline-block; margin-top: 16px; padding: 4px 12px;
+            border-radius: 100px; font-size: 10px; letter-spacing: 2px;
+            text-transform: uppercase; font-weight: 600;
+        }
+        .badge-quantum { color: var(--quantum); border: 1px solid rgba(0,240,255,0.3); background: rgba(0,240,255,0.06); }
+        .badge-faceted { color: var(--faceted); border: 1px solid rgba(168,85,247,0.3); background: rgba(168,85,247,0.06); }
+        .badge-holo { color: var(--holographic); border: 1px solid rgba(244,63,94,0.3); background: rgba(244,63,94,0.06); }
+        .badge-gold { color: var(--gold); border: 1px solid rgba(196,163,90,0.3); background: rgba(196,163,90,0.06); }
+
+        /* ═══ MOIRE IMAGE SECTION ═══ */
+        .moire-section {
+            padding: 100px 24px; text-align: center;
+        }
+        .moire-img-wrap {
+            position: relative; display: inline-block;
+            opacity: 0; transform: scale(0.85) rotateY(8deg);
+        }
+        .moire-img-wrap::before {
+            content: ''; position: absolute; inset: -4px; border-radius: 20px;
+            background: linear-gradient(135deg, var(--quantum), var(--faceted), var(--holographic));
+            opacity: 0; filter: blur(20px); z-index: -1;
+            transition: opacity 0.5s;
+        }
+        .moire-img-wrap.active::before { opacity: 0.3; }
+        .moire-section img {
+            max-width: 700px; width: 100%; border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 0 0 80px rgba(0,240,255,0.08);
+        }
+        .moire-quote {
+            font-size: clamp(18px, 3vw, 28px); font-weight: 300;
+            color: rgba(255,255,255,0.7); max-width: 700px; margin: 40px auto 0;
+            line-height: 1.6; font-style: italic;
+            opacity: 0; transform: translateY(30px);
+        }
+        .moire-quote strong { color: #fff; font-weight: 700; font-style: normal; }
+
+        /* ═══ CTA / FOOTER ═══ */
+        .cta-section {
+            padding: 120px 24px 80px; text-align: center;
+        }
+        .cta-title {
+            font-size: clamp(28px, 5vw, 56px); font-weight: 900; color: #fff;
+            margin-bottom: 24px; opacity: 0; transform: scale(0.9);
+        }
+        .cta-sub {
+            font-size: 17px; color: var(--text-muted); max-width: 600px;
+            margin: 0 auto 40px; line-height: 1.7;
+            opacity: 0; transform: translateY(20px);
+        }
+        .cta-buttons {
+            opacity: 0; transform: translateY(20px);
+        }
+        .cta-btn {
+            display: inline-block; padding: 14px 40px; border-radius: 12px;
+            font-size: 14px; font-weight: 600; letter-spacing: 2px;
+            text-transform: uppercase; text-decoration: none; color: #fff;
+            background: linear-gradient(135deg, rgba(0,240,255,0.2), rgba(168,85,247,0.2));
+            border: 1px solid rgba(0,240,255,0.3);
+            transition: all 0.4s cubic-bezier(0.23,1,0.32,1); margin: 0 8px;
+        }
+        .cta-btn:hover {
+            background: linear-gradient(135deg, rgba(0,240,255,0.35), rgba(168,85,247,0.35));
+            transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,240,255,0.2);
+        }
+        .cta-btn-ghost {
+            background: transparent; border-color: rgba(255,255,255,0.15);
+        }
+        .cta-btn-ghost:hover {
+            background: rgba(255,255,255,0.05);
+            box-shadow: 0 8px 30px rgba(255,255,255,0.05);
+        }
+
+        footer {
+            text-align: center; padding: 40px 24px; font-size: 12px;
+            color: rgba(255,255,255,0.2); letter-spacing: 1px;
+            border-top: 1px solid rgba(255,255,255,0.04);
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        /* ── Section Flash (on enter) ── */
+        .section-flash {
+            position: fixed; inset: 0; z-index: 100; pointer-events: none;
+            background: radial-gradient(circle at center, rgba(0,240,255,0.15), transparent 70%);
+            opacity: 0;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .cs-grid { grid-template-columns: 1fr; }
+            .results-table { font-size: 12px; }
+            .results-table th, .results-table td { padding: 10px 8px; }
+            .mouse-glow { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="bgCanvas"></canvas>
+    <svg class="noise-overlay" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+        <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter>
+        <rect width="100%" height="100%" filter="url(#n)"/>
+    </svg>
+    <div class="mouse-glow" id="mouseGlow"></div>
+    <div class="crescendo-vignette" id="crescendo"></div>
+    <div class="scroll-progress" id="scrollProgress"></div>
+    <div class="section-flash" id="sectionFlash"></div>
+
+    <!-- ═══ HERO ═══ -->
+    <section class="hero" id="heroSection">
+        <div class="hero-content">
+            <span class="hero-badge" id="heroBadge">Clear Seas Solutions LLC &mdash; March 2026</span>
+            <h1 class="hero-title text-shimmer" id="heroTitle"></h1>
+            <p class="hero-sub" id="heroSub">
+                Novel non-generative synthetic cognition. Optical and quantum parity with binary.
+                Swarm lattice agentic intelligence. The OHUI Post-Quantum Secure Internet Protocol.
+                Solo-developed by a philosopher in a basement.
+            </p>
+            <div class="hero-scroll" id="heroScroll">
+                <span>Scroll to explore</span>
+                <div class="scroll-line"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ BREATH DIVIDER ═══ -->
+    <div class="breath-divider">
+        <div class="breath-line" id="breathLine1"></div>
+    </div>
+
+    <!-- ═══ Q-DAY HARDWARE RESULTS ═══ -->
+    <section class="results" id="resultsSection">
+        <span class="section-label" id="resultsLabel">Q-Day Prize Submission</span>
+        <h2 class="section-title" id="resultsTitle">3 ECC Keys Broken on<br>IBM Quantum Hardware</h2>
+        <p class="section-desc" id="resultsDesc">
+            Shor's algorithm for ECDLP, executed on a 156-qubit Heron r2 processor.
+            Secret keys recovered and verified. Gate-level circuits included.
+        </p>
+        <div class="glass results-table-wrap" id="resultsTable" style="padding: 8px; border-radius: 16px; overflow-x: auto;">
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Target</th>
+                        <th>Curve</th>
+                        <th>Secret Key</th>
+                        <th>Gate Depth</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsBody">
+                    <tr>
+                        <td><strong>1-bit</strong></td>
+                        <td>y&sup2;=x&sup3;+x / GF(3)</td>
+                        <td>k = 1</td>
+                        <td>13,638</td>
+                        <td>22.7s</td>
+                        <td><span class="verified">Verified</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>2-bit</strong></td>
+                        <td>y&sup2;=x&sup3;+x+1 / GF(5)</td>
+                        <td>k = 1</td>
+                        <td>230,470</td>
+                        <td>77.0s</td>
+                        <td><span class="verified">Verified</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>3-bit</strong></td>
+                        <td>y&sup2;=x&sup3;+2x+3 / GF(7)</td>
+                        <td>k = 2</td>
+                        <td>36,995</td>
+                        <td>20.4s</td>
+                        <td><span class="verified">Verified</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="results-meta" id="resultsMeta">
+            <span class="hw-badge">ibm_fez &mdash; 156 Qubit Heron r2</span>
+            &nbsp; All circuits compiled to native SX/RZ/CZ gate set. 4,096 shots per run.
+        </p>
+    </section>
+
+    <!-- ═══ BREATH DIVIDER ═══ -->
+    <div class="breath-divider">
+        <div class="breath-line" id="breathLine2"></div>
+    </div>
+
+    <!-- ═══ COMING SOON ═══ -->
+    <section class="coming-soon" id="comingSoonSection">
+        <span class="section-label" id="csLabel">Launching Soon</span>
+        <h2 class="section-title" id="csTitle">Technology Stack</h2>
+        <p class="section-desc" id="csDesc">
+            We have a great deal of technology to introduce to the post-quantum world.
+            We will be licensing this technology and are looking for partners to help scale
+            what is, frankly, a paradigm shift.
+        </p>
+        <div class="cs-grid" id="csGrid">
+            <div class="cs-card" data-accent="quantum">
+                <span class="cs-icon" aria-hidden="true">&#x1f9e0;</span>
+                <h3>Non-Generative Synthetic Cognition</h3>
+                <p>The world's first AI architecture that is not based on neural networks or statistical learning. Built on algebraic-geometric structure inside the E8 exceptional root lattice. Deterministic. Explainable. Novel.</p>
+                <span class="cs-badge badge-quantum">Coming Soon</span>
+            </div>
+            <div class="cs-card" data-accent="faceted">
+                <span class="cs-icon" aria-hidden="true">&#x1f50d;</span>
+                <h3>Optical &amp; Quantum Parity with Binary</h3>
+                <p>A codec framework achieving parity between optical, quantum, and classical binary computation. Cross-parity encoding that bridges fundamentally different information substrates.</p>
+                <span class="cs-badge badge-faceted">Coming Soon</span>
+            </div>
+            <div class="cs-card" data-accent="holo">
+                <span class="cs-icon" aria-hidden="true">&#x1f578;&#xfe0f;</span>
+                <h3>Swarm Lattice Agentic Cognition</h3>
+                <p>Algorithmic swarm intelligence coordinated through lattice geometry. Agents that reason through geometric structure rather than token prediction. Emergent collective computation.</p>
+                <span class="cs-badge badge-holo">Coming Soon</span>
+            </div>
+            <div class="cs-card" data-accent="gold">
+                <span class="cs-icon" aria-hidden="true">&#x1f512;</span>
+                <h3>OHUI Post-Quantum Internet Protocol</h3>
+                <p>A secure internet protocol designed from the ground up for the post-quantum era. Not a patch on existing infrastructure &mdash; a rethinking of how information moves through networks.</p>
+                <span class="cs-badge badge-gold">Coming Soon</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ BREATH DIVIDER ═══ -->
+    <div class="breath-divider">
+        <div class="breath-line" id="breathLine3"></div>
+    </div>
+
+    <!-- ═══ MOIRE ENGINE ═══ -->
+    <section class="moire-section" id="moireSection">
+        <div class="moire-img-wrap" id="moireWrap">
+            <img src="dialectical_moire_engine.png" alt="Dialectical Moire Engine — Family V Apex Architecture" onerror="this.parentElement.style.display='none'">
+        </div>
+        <p class="moire-quote" id="moireQuote">
+            Later we will show you the <strong>singular in singularity</strong> &mdash;
+            by doing this alone and without institutional support.
+        </p>
+    </section>
+
+    <!-- ═══ CTA ═══ -->
+    <section class="cta-section" id="ctaSection">
+        <h2 class="cta-title" id="ctaTitle">A Brave New World</h2>
+        <p class="cta-sub" id="ctaSub">
+            One person. No team. No funding. No institution.
+            Multiple technology families. The quantum code is the part we're giving away.
+            The part we're keeping is the part that matters.
+        </p>
+        <div class="cta-buttons" id="ctaButtons">
+            <a class="cta-btn" href="https://github.com/Domusgpt/Pauly-Shors-Quantum-Al-Gore-Rhythm">View Q-Day Submission</a>
+            <a class="cta-btn cta-btn-ghost" href="SUBMISSION_WRITEUP.md">Technical Writeup</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025&ndash;2026 <a href="#">Clear Seas Solutions LLC</a> / Paul J. Phillips &middot; All Rights Reserved</p>
+    </footer>
+
+    <script>
+    // ══════════════════════════════════════════════════
+    // Animated Background: E8-inspired particle field
+    // ══════════════════════════════════════════════════
+    (function() {
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+        let w, h, particles = [], mouse = { x: -1000, y: -1000 };
+
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        const shells = [0.15, 0.25, 0.35, 0.45, 0.55, 0.65];
+        const counts = [24, 56, 40, 40, 56, 24];
+        const colors = ['#00f0ff', '#a855f7', '#f43f5e', '#c4a35a', '#22c55e', '#00f0ff'];
+
+        shells.forEach((r, si) => {
+            for (let i = 0; i < counts[si]; i++) {
+                const angle = (i / counts[si]) * Math.PI * 2 + Math.random() * 0.3;
+                const radius = r * Math.min(w, h) * 0.5;
+                particles.push({
+                    x: w/2 + Math.cos(angle) * radius,
+                    y: h/2 + Math.sin(angle) * radius,
+                    r: Math.random() * 1.5 + 0.5,
+                    speed: 0.0003 + Math.random() * 0.0005,
+                    angle, shell: si, radius,
+                    color: colors[si],
+                    phase: Math.random() * Math.PI * 2
+                });
+            }
+        });
+
+        document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+
+        let t = 0;
+        function draw() {
+            ctx.clearRect(0, 0, w, h);
+            t += 0.008;
+
+            particles.forEach(p => {
+                p.angle += p.speed;
+                p.x = w/2 + Math.cos(p.angle + Math.sin(t + p.phase) * 0.3) * p.radius;
+                p.y = h/2 + Math.sin(p.angle + Math.cos(t * 0.7 + p.phase) * 0.3) * p.radius;
+
+                const dx = p.x - mouse.x, dy = p.y - mouse.y;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                if (dist < 150) {
+                    const force = (150 - dist) / 150 * 8;
+                    p.x += (dx / dist) * force;
+                    p.y += (dy / dist) * force;
+                }
+
+                const alpha = 0.3 + Math.sin(t * 2 + p.phase) * 0.15;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = alpha;
+                ctx.fill();
+            });
+
+            ctx.globalAlpha = 0.04;
+            ctx.strokeStyle = '#00f0ff';
+            ctx.lineWidth = 0.5;
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    if (particles[i].shell !== particles[j].shell) continue;
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    if (dx*dx + dy*dy < 8000) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            ctx.globalAlpha = 1;
+            requestAnimationFrame(draw);
+        }
+        draw();
+    })();
+
+    // ══════════════════════════════════════════════════
+    // Lenis Smooth Scroll
+    // ══════════════════════════════════════════════════
+    let lenis;
+    if (typeof Lenis !== 'undefined') {
+        lenis = new Lenis({ duration: 1.2, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add(time => lenis.raf(time * 1000));
+        gsap.ticker.lagSmoothing(0);
+    }
+
+    // ══════════════════════════════════════════════════
+    // Mouse Glow Follower
+    // ══════════════════════════════════════════════════
+    const glow = document.getElementById('mouseGlow');
+    document.addEventListener('mousemove', e => {
+        glow.style.left = e.clientX + 'px';
+        glow.style.top = e.clientY + 'px';
+    });
+
+    // Card mouse tracking for radial glow
+    document.querySelectorAll('.cs-card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+            const r = card.getBoundingClientRect();
+            card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+            card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+        });
+    });
+
+    // ══════════════════════════════════════════════════
+    // Scroll Progress
+    // ══════════════════════════════════════════════════
+    gsap.to('#scrollProgress', {
+        scaleX: 1,
+        ease: 'none',
+        scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 0.3 }
+    });
+
+    // ══════════════════════════════════════════════════
+    // Crescendo Vignette (intensifies with scroll)
+    // ══════════════════════════════════════════════════
+    gsap.to('#crescendo', {
+        opacity: 1,
+        scrollTrigger: { trigger: 'body', start: '30% top', end: '80% top', scrub: true }
+    });
+
+    // ══════════════════════════════════════════════════
+    // HERO — Cinematic Entrance
+    // ══════════════════════════════════════════════════
+    (function heroEntrance() {
+        // Split hero title into chars
+        const titleEl = document.getElementById('heroTitle');
+        const titleText = "The Post-Quantum Era Starts Here";
+        const words = titleText.split(' ');
+        titleEl.innerHTML = words.map(w => {
+            if (w === 'Post-Quantum') {
+                return '<span class="accent">' + w.split('').map(c =>
+                    `<span class="char">${c}</span>`
+                ).join('') + '</span>';
+            }
+            return w.split('').map(c =>
+                c === ' ' ? ' ' : `<span class="char">${c}</span>`
+            ).join('');
+        }).join('<span class="char"> </span>');
+        titleEl.style.opacity = 1;
+
+        const tl = gsap.timeline({ delay: 0.3 });
+
+        // Badge drops in
+        tl.to('#heroBadge', {
+            opacity: 1, y: 0, duration: 0.8, ease: 'power3.out'
+        });
+
+        // Characters cascade in with stagger
+        tl.to('.hero-title .char', {
+            opacity: 1, y: 0, rotateX: 0,
+            duration: 0.6, stagger: 0.025, ease: 'power3.out'
+        }, '-=0.4');
+
+        // Subtitle fades up
+        tl.to('#heroSub', {
+            opacity: 1, y: 0, duration: 0.8, ease: 'power2.out'
+        }, '-=0.3');
+
+        // Scroll indicator
+        tl.to('#heroScroll', {
+            opacity: 1, duration: 1, ease: 'power2.out'
+        }, '-=0.3');
+
+        // Hero parallax on scroll
+        gsap.to('.hero-content', {
+            y: -120, opacity: 0,
+            scrollTrigger: {
+                trigger: '.hero', start: 'top top', end: 'bottom 40%',
+                scrub: 0.5
+            }
+        });
+    })();
+
+    // ══════════════════════════════════════════════════
+    // BREATH LINE DIVIDERS — Expand on scroll
+    // ══════════════════════════════════════════════════
+    ['#breathLine1', '#breathLine2', '#breathLine3'].forEach(sel => {
+        gsap.to(sel, {
+            width: '80%',
+            duration: 1,
+            scrollTrigger: {
+                trigger: sel, start: 'top 80%', end: 'top 40%', scrub: true
+            }
+        });
+    });
+
+    // ══════════════════════════════════════════════════
+    // RESULTS SECTION — Choreographed reveal
+    // ══════════════════════════════════════════════════
+    (function resultsReveal() {
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: '#resultsSection', start: 'top 70%',
+                toggleActions: 'play none none none'
+            }
+        });
+
+        // Section flash
+        tl.to('#sectionFlash', { opacity: 1, duration: 0.15 })
+          .to('#sectionFlash', { opacity: 0, duration: 0.6 });
+
+        // Label slides in from left
+        tl.to('#resultsLabel', {
+            opacity: 1, x: 0, duration: 0.6, ease: 'power3.out'
+        }, 0.1);
+
+        // Title reveals
+        tl.to('#resultsTitle', {
+            opacity: 1, y: 0, duration: 0.8, ease: 'power3.out'
+        }, 0.2);
+
+        // Description
+        tl.to('#resultsDesc', {
+            opacity: 1, y: 0, duration: 0.7, ease: 'power2.out'
+        }, 0.35);
+
+        // Table slides up
+        tl.to('#resultsTable', {
+            opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power3.out'
+        }, 0.45);
+
+        // Table rows stagger in
+        tl.to('#resultsBody tr', {
+            opacity: 1, x: 0, duration: 0.5, stagger: 0.12, ease: 'power2.out'
+        }, 0.6);
+
+        // Meta info
+        tl.to('#resultsMeta', {
+            opacity: 1, duration: 0.6, ease: 'power2.out'
+        }, 0.9);
+    })();
+
+    // ══════════════════════════════════════════════════
+    // COMING SOON — Staggered card reveals
+    // ══════════════════════════════════════════════════
+    (function comingSoonReveal() {
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: '#comingSoonSection', start: 'top 70%',
+                toggleActions: 'play none none none'
+            }
+        });
+
+        tl.to('#csLabel', {
+            opacity: 1, x: 0, duration: 0.6, ease: 'power3.out'
+        });
+        tl.to('#csTitle', {
+            opacity: 1, y: 0, duration: 0.8, ease: 'power3.out'
+        }, 0.1);
+        tl.to('#csDesc', {
+            opacity: 1, y: 0, duration: 0.7, ease: 'power2.out'
+        }, 0.25);
+
+        // Cards fly in with stagger and spring
+        tl.to('.cs-card', {
+            opacity: 1, y: 0, scale: 1,
+            duration: 0.8, stagger: 0.15,
+            ease: 'back.out(1.2)'
+        }, 0.4);
+    })();
+
+    // ══════════════════════════════════════════════════
+    // MOIRE — Dramatic image reveal
+    // ══════════════════════════════════════════════════
+    (function moireReveal() {
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: '#moireSection', start: 'top 65%',
+                toggleActions: 'play none none none'
+            }
+        });
+
+        tl.to('#moireWrap', {
+            opacity: 1, scale: 1, rotateY: 0,
+            duration: 1.2, ease: 'power3.out',
+            onComplete: () => document.getElementById('moireWrap').classList.add('active')
+        });
+
+        tl.to('#moireQuote', {
+            opacity: 1, y: 0, duration: 0.9, ease: 'power2.out'
+        }, 0.4);
+    })();
+
+    // ══════════════════════════════════════════════════
+    // CTA — Final crescendo
+    // ══════════════════════════════════════════════════
+    (function ctaReveal() {
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: '#ctaSection', start: 'top 70%',
+                toggleActions: 'play none none none'
+            }
+        });
+
+        tl.to('#ctaTitle', {
+            opacity: 1, scale: 1, duration: 1, ease: 'power3.out'
+        });
+        tl.to('#ctaSub', {
+            opacity: 1, y: 0, duration: 0.7, ease: 'power2.out'
+        }, 0.2);
+        tl.to('#ctaButtons', {
+            opacity: 1, y: 0, duration: 0.6, ease: 'power2.out'
+        }, 0.4);
+    })();
+
+    // ══════════════════════════════════════════════════
+    // Parallax subtle float on cards
+    // ══════════════════════════════════════════════════
+    document.querySelectorAll('.cs-card').forEach((card, i) => {
+        gsap.to(card, {
+            y: -15 - (i * 5),
+            scrollTrigger: {
+                trigger: card, start: 'top bottom', end: 'bottom top',
+                scrub: 0.5
+            }
+        });
+    });
+
+    </script>
+</body>
+</html>
