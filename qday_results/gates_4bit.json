@@ -1,0 +1,15 @@
+{
+  "circuit_name": "Shor_ECDLP_QDay",
+  "target_bits": 4,
+  "total_qubits": 27,
+  "total_depth": 960,
+  "gate_counts": {
+    "mcx": 630,
+    "x": 622,
+    "cp": 110,
+    "h": 44,
+    "measure": 22,
+    "barrier": 3
+  },
+  "gates_by_qubit": {}
+}
