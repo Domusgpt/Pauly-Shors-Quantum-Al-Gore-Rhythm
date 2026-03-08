@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clear Seas Solutions</title>
-    <meta name="description" content="Post-quantum technology. Deterministic synthetic cognition. The singular in singularity.">
+    <title>Quantum Involution — Q-I</title>
+    <meta name="description" content="Post-quantum technology. Deterministic synthetic cognition. The involution has begun.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -12,103 +12,164 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
     <style>
         :root {
-            --bg: #0A0A0B;
-            --glass-bg: rgba(15,15,17,0.6);
-            --glass-border: rgba(255,255,255,0.08);
-            --glass-hover: rgba(255,255,255,0.18);
+            --bg: #06060A;
+            --glass-bg: rgba(12,12,18,0.65);
+            --glass-border: rgba(255,255,255,0.06);
+            --glass-hover: rgba(255,255,255,0.16);
             --primary: #7B3FF2;
             --secondary: #4FC3F7;
+            --accent: #A855F7;
             --text-1: rgba(255,255,255,0.95);
-            --text-2: rgba(255,255,255,0.6);
-            --text-3: rgba(255,255,255,0.25);
-            --glow: 0 0 30px rgba(123,63,242,0.3);
+            --text-2: rgba(255,255,255,0.55);
+            --text-3: rgba(255,255,255,0.2);
+            --glow: 0 0 40px rgba(123,63,242,0.35);
         }
         *{margin:0;padding:0;box-sizing:border-box}
         body{background:var(--bg);color:var(--text-1);font-family:'Space Grotesk',-apple-system,sans-serif;overflow-x:hidden;line-height:1.6}
-        ::-webkit-scrollbar{width:4px}
+        body.scroll-locked{overflow:hidden}
+        ::-webkit-scrollbar{width:3px}
         ::-webkit-scrollbar-track{background:transparent}
         ::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--primary),var(--secondary));border-radius:2px}
 
         .bg-gradient{position:fixed;inset:0;z-index:-1;
-            background:radial-gradient(circle at 20% 30%,rgba(123,63,242,0.12) 0%,transparent 50%),
-                        radial-gradient(circle at 80% 70%,rgba(79,195,247,0.08) 0%,transparent 50%);
-            animation:bgPulse 20s ease-in-out infinite}
-        @keyframes bgPulse{0%,100%{opacity:1}50%{opacity:0.5}}
+            background:radial-gradient(ellipse at 25% 20%,rgba(123,63,242,0.1) 0%,transparent 55%),
+                        radial-gradient(ellipse at 75% 80%,rgba(79,195,247,0.06) 0%,transparent 55%),
+                        radial-gradient(ellipse at 50% 50%,rgba(168,85,247,0.04) 0%,transparent 40%)}
 
-        .noise{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:0.018}
+        .noise{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:0.015}
         .scroll-bar{position:fixed;top:0;left:0;width:100%;height:2px;z-index:9999;pointer-events:none;
             background:linear-gradient(90deg,var(--primary),var(--secondary),var(--primary));
             background-size:300% 100%;transform-origin:left;transform:scaleX(0);
             animation:hueShift 4s linear infinite}
         @keyframes hueShift{to{background-position:300% 50%}}
 
-        /* ═══ INTRO — 1000vh pinned ═══ */
-        .intro{position:relative;min-height:1000vh}
+        /* ═══ Q-I ALGORITHMIC LOGO (SVG) ═══ */
+        .qi-logo-wrap{position:absolute;width:clamp(240px,40vmin,500px);height:clamp(240px,40vmin,500px);z-index:5}
+        .qi-logo-wrap svg{width:100%;height:100%;overflow:visible}
+        .qi-ring{fill:none;stroke-linecap:round;opacity:0}
+        .qi-glyph{fill:none;stroke:url(#qiGrad);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:0}
+        .qi-hex{fill:none;stroke-width:0.8;opacity:0}
+        .qi-dot{opacity:0}
+        .qi-field-line{fill:none;stroke-width:0.3;opacity:0}
+
+        /* ═══ INTRO — 1200vh pinned ═══ */
+        .intro{position:relative;min-height:1200vh}
         .intro-pin{height:100vh;width:100%;position:relative;overflow:hidden;background:var(--bg);
             display:flex;align-items:center;justify-content:center}
-        .intro-sigil{position:absolute;max-width:60vmin;width:100%;opacity:0;will-change:transform,opacity;
-            filter:brightness(0) invert(1);mix-blend-mode:screen;pointer-events:none}
-        .intro-text{position:absolute;z-index:10;text-align:center;opacity:0;pointer-events:none;padding:0 20px}
-        .intro-text .lbl{font-size:11px;letter-spacing:6px;text-transform:uppercase;color:var(--secondary);opacity:0.7}
-        .intro-text .big{font-size:clamp(26px,6vw,68px);font-weight:700;letter-spacing:clamp(2px,0.8vw,8px);
-            line-height:1.1;margin-top:8px;
-            background:linear-gradient(135deg,#fff 0%,var(--secondary) 50%,var(--primary) 100%);
-            background-size:200% auto;-webkit-background-clip:text;background-clip:text;
-            -webkit-text-fill-color:transparent;animation:shim 4s linear infinite}
-        @keyframes shim{to{background-position:200% center}}
-        .intro-text .dim{font-size:clamp(11px,1.4vw,14px);color:var(--text-3);letter-spacing:2px;margin-top:12px;
-            max-width:460px;margin-left:auto;margin-right:auto;font-style:italic}
-        .lattice{position:absolute;inset:-20%;z-index:1;opacity:0;pointer-events:none;
-            background:repeating-linear-gradient(0deg,transparent,transparent 50px,rgba(123,63,242,0.025) 50px,rgba(123,63,242,0.025) 51px),
-                        repeating-linear-gradient(90deg,transparent,transparent 50px,rgba(123,63,242,0.025) 50px,rgba(123,63,242,0.025) 51px)}
+
+        /* Layered background elements */
+        .intro-grid{position:absolute;inset:-20%;z-index:1;opacity:0;pointer-events:none;
+            background:repeating-linear-gradient(0deg,transparent,transparent 60px,rgba(123,63,242,0.02) 60px,rgba(123,63,242,0.02) 61px),
+                        repeating-linear-gradient(90deg,transparent,transparent 60px,rgba(123,63,242,0.02) 60px,rgba(123,63,242,0.02) 61px)}
+        .intro-radial{position:absolute;width:120vmax;height:120vmax;border-radius:50%;z-index:1;opacity:0;pointer-events:none;
+            background:radial-gradient(circle,rgba(123,63,242,0.08) 0%,transparent 60%)}
+        .intro-ring{position:absolute;border-radius:50%;border:1px solid rgba(123,63,242,0.06);z-index:1;opacity:0;pointer-events:none}
+        .intro-ring-1{width:50vmin;height:50vmin}
+        .intro-ring-2{width:75vmin;height:75vmin}
+        .intro-ring-3{width:100vmin;height:100vmin}
+        .intro-ring-4{width:130vmin;height:130vmin;border-color:rgba(79,195,247,0.04)}
+        .intro-scanline{position:absolute;width:100%;height:1px;z-index:3;opacity:0;pointer-events:none;
+            background:linear-gradient(90deg,transparent 10%,rgba(79,195,247,0.15) 50%,transparent 90%)}
+        .intro-vignette{position:absolute;inset:0;z-index:2;pointer-events:none;
+            background:radial-gradient(ellipse at center,transparent 40%,var(--bg) 100%);opacity:0}
+
+        .intro-sigil{position:absolute;max-width:55vmin;width:100%;opacity:0;will-change:transform,opacity;
+            filter:brightness(0) invert(1);mix-blend-mode:screen;pointer-events:none;z-index:4}
+
+        .intro-text{position:absolute;z-index:10;text-align:center;opacity:0;pointer-events:none;padding:0 24px;width:100%}
+        .intro-text .lbl{font-size:10px;letter-spacing:8px;text-transform:uppercase;color:var(--secondary);opacity:0.6}
+        .intro-text .big{font-size:clamp(28px,7vw,80px);font-weight:700;letter-spacing:clamp(2px,1vw,10px);
+            line-height:1.05;margin-top:8px;
+            background:linear-gradient(135deg,#fff 0%,var(--secondary) 40%,var(--primary) 80%,var(--accent) 100%);
+            background-size:300% auto;-webkit-background-clip:text;background-clip:text;
+            -webkit-text-fill-color:transparent;animation:shim 5s linear infinite}
+        @keyframes shim{to{background-position:300% center}}
+        .intro-text .med{font-size:clamp(16px,2.5vw,28px);font-weight:600;letter-spacing:clamp(3px,0.8vw,12px);
+            text-transform:uppercase;color:var(--text-1);margin-top:6px}
+        .intro-text .dim{font-size:clamp(11px,1.3vw,14px);color:var(--text-3);letter-spacing:2px;margin-top:14px;
+            max-width:500px;margin-left:auto;margin-right:auto;font-style:italic}
+        .intro-text .sub{font-size:clamp(12px,1.5vw,16px);color:var(--text-2);letter-spacing:3px;margin-top:10px;text-transform:uppercase}
+
+        /* Horizontal reveal lines */
+        .h-line{position:absolute;height:1px;z-index:6;opacity:0;pointer-events:none}
+        .h-line-1{top:25%;left:0;width:100%;background:linear-gradient(90deg,transparent,rgba(123,63,242,0.15) 30%,rgba(79,195,247,0.15) 70%,transparent)}
+        .h-line-2{top:75%;left:0;width:100%;background:linear-gradient(90deg,transparent,rgba(79,195,247,0.12) 40%,rgba(123,63,242,0.12) 60%,transparent)}
+        .v-line{position:absolute;width:1px;z-index:6;opacity:0;pointer-events:none}
+        .v-line-1{left:20%;top:0;height:100%;background:linear-gradient(180deg,transparent,rgba(123,63,242,0.08) 30%,transparent 70%)}
+        .v-line-2{right:20%;top:0;height:100%;background:linear-gradient(180deg,transparent,rgba(79,195,247,0.08) 30%,transparent 70%)}
+
+        /* Corner markers */
+        .corner{position:absolute;width:30px;height:30px;z-index:6;opacity:0;pointer-events:none}
+        .corner::before,.corner::after{content:'';position:absolute;background:rgba(79,195,247,0.2)}
+        .corner-tl{top:8%;left:8%}.corner-tl::before{top:0;left:0;width:20px;height:1px}.corner-tl::after{top:0;left:0;width:1px;height:20px}
+        .corner-tr{top:8%;right:8%}.corner-tr::before{top:0;right:0;width:20px;height:1px}.corner-tr::after{top:0;right:0;width:1px;height:20px}
+        .corner-bl{bottom:8%;left:8%}.corner-bl::before{bottom:0;left:0;width:20px;height:1px}.corner-bl::after{bottom:0;left:0;width:1px;height:20px}
+        .corner-br{bottom:8%;right:8%}.corner-br::before{bottom:0;right:0;width:20px;height:1px}.corner-br::after{bottom:0;right:0;width:1px;height:20px}
+
+        /* Particle field canvas */
+        #particleCanvas{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0}
+
+        /* ═══ NAV BAR ═══ */
+        .nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 28px;display:flex;align-items:center;justify-content:space-between;
+            background:rgba(6,6,10,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+            border-bottom:1px solid rgba(255,255,255,0.04);opacity:0;transform:translateY(-100%)}
+        .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+        .nav-brand svg{width:28px;height:28px}
+        .nav-brand span{font-size:14px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--text-1)}
+        .nav-links{display:flex;gap:24px}
+        .nav-links a{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text-2);text-decoration:none;transition:color 0.3s}
+        .nav-links a:hover{color:var(--secondary)}
 
         /* ═══ CATALOG HEADER ═══ */
-        .cat-header{text-align:center;padding:80px 20px 20px;position:relative;z-index:2;
-            background:linear-gradient(180deg,rgba(123,63,242,0.08) 0%,transparent 100%)}
+        .cat-header{text-align:center;padding:100px 20px 20px;position:relative;z-index:2;
+            background:linear-gradient(180deg,rgba(123,63,242,0.06) 0%,transparent 100%)}
         .cat-header h1{font-size:clamp(2rem,5vw,3.5rem);
             background:linear-gradient(135deg,var(--primary),var(--secondary));
             -webkit-background-clip:text;-webkit-text-fill-color:transparent;
             background-size:200% auto;animation:shim 3s linear infinite;margin-bottom:12px}
-        .cat-header p{color:var(--text-2);font-size:clamp(14px,1.6vw,17px);max-width:550px;margin:0 auto}
+        .cat-header p{color:var(--text-2);font-size:clamp(13px,1.5vw,16px);max-width:600px;margin:0 auto;line-height:1.7}
 
-        /* ── Stats Bar ── */
+        /* Stats Bar */
         .stats{display:flex;justify-content:center;gap:40px;padding:28px;
             background:var(--glass-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
             border:1px solid var(--glass-border);border-radius:16px;
-            max-width:800px;margin:30px auto;flex-wrap:wrap;position:relative;z-index:2}
+            max-width:860px;margin:30px auto;flex-wrap:wrap;position:relative;z-index:2}
         .stat-val{font-size:clamp(1.8rem,4vw,2.5rem);font-weight:700;
             background:linear-gradient(135deg,var(--primary),var(--secondary));
             -webkit-background-clip:text;-webkit-text-fill-color:transparent}
-        .stat-lbl{font-size:12px;color:var(--text-2);letter-spacing:1px}
+        .stat-lbl{font-size:11px;color:var(--text-2);letter-spacing:1px}
 
         /* ═══ TECH CATALOG GRID ═══ */
         .catalog{max-width:1300px;margin:0 auto;padding:40px 20px;position:relative;z-index:2}
-        .catalog-title{font-size:1.3rem;color:var(--primary);margin-bottom:28px;padding-bottom:10px;
-            border-bottom:1px solid var(--glass-border);letter-spacing:2px}
+        .catalog-title{font-size:1.2rem;color:var(--primary);margin-bottom:28px;padding-bottom:10px;
+            border-bottom:1px solid var(--glass-border);letter-spacing:3px;text-transform:uppercase}
         .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px}
 
         .card{background:var(--glass-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
             border:1px solid var(--glass-border);border-radius:16px;overflow:hidden;
-            transition:all 0.3s cubic-bezier(0.23,1,0.32,1);opacity:0;transform:translateY(40px)}
+            transition:all 0.35s cubic-bezier(0.23,1,0.32,1);opacity:0;transform:translateY(40px)}
         .card:hover{border-color:var(--glass-hover);box-shadow:var(--glow);transform:translateY(-4px) !important}
 
-        .card-visual{width:100%;height:200px;background:var(--bg);position:relative;overflow:hidden;
+        .card-visual{width:100%;height:200px;background:linear-gradient(135deg,rgba(6,6,10,1),rgba(12,12,20,1));position:relative;overflow:hidden;
             display:flex;align-items:center;justify-content:center}
-        .card-visual img{max-height:180px;max-width:90%;object-fit:contain;
-            filter:brightness(0) invert(1) opacity(0.7);mix-blend-mode:screen}
-        .card-visual canvas{position:absolute;inset:0;width:100%;height:100%}
+        .card-visual img{max-height:170px;max-width:85%;object-fit:contain;
+            filter:brightness(0) invert(1) opacity(0.6);mix-blend-mode:screen}
         .card-visual .card-overlay{position:absolute;inset:0;
-            background:linear-gradient(135deg,rgba(123,63,242,0.1),rgba(79,195,247,0.05))}
+            background:linear-gradient(135deg,rgba(123,63,242,0.08),rgba(79,195,247,0.04))}
+        .card-visual .card-shimmer{position:absolute;inset:0;opacity:0;
+            background:linear-gradient(105deg,transparent 40%,rgba(123,63,242,0.06) 50%,transparent 60%);
+            background-size:200% 100%;animation:cardShim 3s ease-in-out infinite}
+        @keyframes cardShim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+        .card:hover .card-shimmer{opacity:1}
 
         .card-body{padding:22px}
-        .card-title{font-size:1.1rem;font-weight:600;color:var(--text-1);margin-bottom:8px}
-        .card-desc{font-size:13px;color:var(--text-2);line-height:1.6;margin-bottom:16px}
+        .card-title{font-size:1.05rem;font-weight:600;color:var(--text-1);margin-bottom:8px;letter-spacing:0.5px}
+        .card-desc{font-size:12.5px;color:var(--text-2);line-height:1.65;margin-bottom:16px}
         .card-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
-        .tag{padding:4px 10px;background:rgba(123,63,242,0.15);border-radius:4px;font-size:10px;
+        .tag{padding:4px 10px;background:rgba(123,63,242,0.12);border-radius:4px;font-size:10px;
             color:var(--secondary);letter-spacing:0.5px;text-transform:uppercase}
-        .tag-alt{background:rgba(79,195,247,0.1);color:var(--secondary)}
-        .tag-warn{background:rgba(255,180,0,0.1);color:#ffb400}
-        .card-status{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3)}
+        .tag-warn{background:rgba(255,180,0,0.08);color:#ffb400}
+        .card-status{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-3)}
 
         /* ═══ Q-DAY RESULTS ═══ */
         .results{padding:80px 24px;max-width:960px;margin:0 auto;position:relative;z-index:2}
@@ -121,15 +182,15 @@
             transition:border-color 0.3s,box-shadow 0.3s;position:relative}
         .glass-table:hover{border-color:var(--glass-hover);box-shadow:var(--glow)}
         .glass-table::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;
-            background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent)}
+            background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent)}
         table{width:100%;border-collapse:collapse;font-size:13px}
         th{text-align:left;padding:12px 16px;font-size:10px;letter-spacing:2px;text-transform:uppercase;
-            color:var(--secondary);font-weight:500;border-bottom:1px solid rgba(79,195,247,0.1)}
-        td{padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.03);color:var(--text-1)}
+            color:var(--secondary);font-weight:500;border-bottom:1px solid rgba(79,195,247,0.08)}
+        td{padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.025);color:var(--text-1)}
         tr:hover td{background:rgba(123,63,242,0.03)}
         .verified{color:#22c55e;font-weight:600;font-size:11px;letter-spacing:1.5px;text-transform:uppercase}
         .hw-tag{display:inline-block;padding:3px 10px;border-radius:4px;font-size:10px;letter-spacing:1px;
-            background:rgba(79,195,247,0.08);color:var(--secondary);border:1px solid rgba(79,195,247,0.15)}
+            background:rgba(79,195,247,0.06);color:var(--secondary);border:1px solid rgba(79,195,247,0.12)}
 
         /* ═══ CLOSING ═══ */
         .closing{text-align:center;padding:100px 24px 80px;position:relative;z-index:2}
@@ -139,56 +200,191 @@
         .cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
         .cta-link{display:inline-block;padding:12px 28px;border-radius:8px;font-size:12px;font-weight:600;
             text-decoration:none;letter-spacing:1.5px;text-transform:uppercase;transition:all 0.3s cubic-bezier(0.23,1,0.32,1)}
-        .cta-1{background:linear-gradient(135deg,var(--primary),#9B5BF7);color:#fff}
-        .cta-1:hover{transform:scale(1.05);box-shadow:0 5px 20px rgba(123,63,242,0.4)}
+        .cta-1{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff}
+        .cta-1:hover{transform:scale(1.05);box-shadow:0 5px 25px rgba(123,63,242,0.45)}
         .cta-2{background:transparent;border:1px solid var(--glass-border);color:var(--text-2)}
         .cta-2:hover{background:rgba(255,255,255,0.03);transform:translateY(-2px)}
 
-        footer{text-align:center;padding:40px 24px;font-size:11px;color:rgba(255,255,255,0.1);
-            letter-spacing:1px;border-top:1px solid rgba(255,255,255,0.03);position:relative;z-index:2}
+        footer{text-align:center;padding:40px 24px;font-size:11px;color:rgba(255,255,255,0.08);
+            letter-spacing:1px;border-top:1px solid rgba(255,255,255,0.02);position:relative;z-index:2}
         footer a{color:var(--primary);text-decoration:none}
 
         @media(max-width:768px){
             .grid{grid-template-columns:1fr}
             .stats{gap:20px}
-            .intro-sigil{max-width:80vmin}
+            .intro-sigil{max-width:75vmin}
+            .nav-links{display:none}
         }
     </style>
 </head>
 <body>
     <div class="bg-gradient"></div>
     <svg class="noise" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
-        <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter>
+        <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" stitchTiles="stitch"/></filter>
         <rect width="100%" height="100%" filter="url(#n)"/>
     </svg>
     <div class="scroll-bar" id="scrollBar"></div>
 
-    <!-- ═══ INTRO — 1000vh Pinned ═══ -->
+    <!-- ═══ FIXED NAV ═══ -->
+    <nav class="nav" id="mainNav">
+        <a class="nav-brand" href="#">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <defs><linearGradient id="nGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7B3FF2"/><stop offset="100%" stop-color="#4FC3F7"/></linearGradient></defs>
+                <circle cx="50" cy="50" r="38" fill="none" stroke="url(#nGrad)" stroke-width="2"/>
+                <path d="M32 68 Q32 32 50 32 Q68 32 50 50 Q32 68 50 68 Q68 68 68 32" fill="none" stroke="url(#nGrad)" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="68" y1="38" x2="68" y2="68" stroke="url(#nGrad)" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+            <span>Quantum Involution</span>
+        </a>
+        <div class="nav-links">
+            <a href="#techGrid">Codex</a>
+            <a href="#resultsSection">Results</a>
+            <a href="mailto:Paul@clearseassolutions.com">Contact</a>
+        </div>
+    </nav>
+
+    <!-- ═══ INTRO — 1200vh Pinned, Multi-Layered ═══ -->
     <section class="intro" id="introSection">
         <div class="intro-pin" id="introPin">
-            <div class="lattice" id="lattice"></div>
+            <!-- Layer 0: Particle field -->
+            <canvas id="particleCanvas"></canvas>
+
+            <!-- Layer 1: Grid + radial -->
+            <div class="intro-grid" id="introGrid"></div>
+            <div class="intro-radial" id="introRadial"></div>
+
+            <!-- Layer 2: Concentric rings -->
+            <div class="intro-ring intro-ring-1" id="ring1"></div>
+            <div class="intro-ring intro-ring-2" id="ring2"></div>
+            <div class="intro-ring intro-ring-3" id="ring3"></div>
+            <div class="intro-ring intro-ring-4" id="ring4"></div>
+
+            <!-- Layer 3: Scan lines + vignette -->
+            <div class="intro-scanline" id="scanline1" style="top:30%"></div>
+            <div class="intro-scanline" id="scanline2" style="top:70%"></div>
+            <div class="intro-vignette" id="vignette"></div>
+
+            <!-- Layer 4: Structural lines -->
+            <div class="h-line h-line-1" id="hLine1"></div>
+            <div class="h-line h-line-2" id="hLine2"></div>
+            <div class="v-line v-line-1" id="vLine1"></div>
+            <div class="v-line v-line-2" id="vLine2"></div>
+
+            <!-- Layer 5: Corner markers -->
+            <div class="corner corner-tl" id="cTL"></div>
+            <div class="corner corner-tr" id="cTR"></div>
+            <div class="corner corner-bl" id="cBL"></div>
+            <div class="corner corner-br" id="cBR"></div>
+
+            <!-- Layer 6: Algorithmic Q-I Logo SVG -->
+            <div class="qi-logo-wrap" id="qiLogo">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="qiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#7B3FF2"/>
+                            <stop offset="50%" stop-color="#4FC3F7"/>
+                            <stop offset="100%" stop-color="#A855F7"/>
+                        </linearGradient>
+                        <linearGradient id="qiGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#4FC3F7" stop-opacity="0.6"/>
+                            <stop offset="100%" stop-color="#7B3FF2" stop-opacity="0.6"/>
+                        </linearGradient>
+                        <radialGradient id="qiGlow" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#7B3FF2" stop-opacity="0.2"/>
+                            <stop offset="100%" stop-color="#7B3FF2" stop-opacity="0"/>
+                        </radialGradient>
+                    </defs>
+                    <!-- Glow backdrop -->
+                    <circle cx="100" cy="100" r="90" fill="url(#qiGlow)" class="qi-dot" id="qiGlowBg"/>
+                    <!-- Outer ring -->
+                    <circle cx="100" cy="100" r="88" class="qi-ring" id="qiR1" stroke="url(#qiGrad)" stroke-width="0.6"/>
+                    <!-- Mid ring -->
+                    <circle cx="100" cy="100" r="75" class="qi-ring" id="qiR2" stroke="url(#qiGrad2)" stroke-width="0.4"/>
+                    <!-- Inner ring -->
+                    <circle cx="100" cy="100" r="62" class="qi-ring" id="qiR3" stroke="url(#qiGrad)" stroke-width="0.8"/>
+                    <!-- Hexagonal shell 1 (outer) -->
+                    <polygon points="100,18 171,42 171,108 100,132 29,108 29,42" class="qi-hex" id="qiH1" stroke="url(#qiGrad2)" transform="translate(0,18)"/>
+                    <!-- Hexagonal shell 2 (inner, rotated 30deg) -->
+                    <polygon points="100,35 152,55 152,95 100,115 48,95 48,55" class="qi-hex" id="qiH2" stroke="url(#qiGrad)" transform="rotate(30,100,100) translate(0,25)"/>
+                    <!-- E8 field lines (6 radials) -->
+                    <line x1="100" y1="12" x2="100" y2="188" class="qi-field-line" id="qiF1" stroke="url(#qiGrad2)"/>
+                    <line x1="23" y1="56" x2="177" y2="144" class="qi-field-line" id="qiF2" stroke="url(#qiGrad2)"/>
+                    <line x1="23" y1="144" x2="177" y2="56" class="qi-field-line" id="qiF3" stroke="url(#qiGrad2)"/>
+                    <!-- 12 lattice dots -->
+                    <circle cx="100" cy="12" r="2" fill="#4FC3F7" class="qi-dot" id="qiD1"/>
+                    <circle cx="177" cy="56" r="2" fill="#7B3FF2" class="qi-dot" id="qiD2"/>
+                    <circle cx="177" cy="144" r="2" fill="#4FC3F7" class="qi-dot" id="qiD3"/>
+                    <circle cx="100" cy="188" r="2" fill="#7B3FF2" class="qi-dot" id="qiD4"/>
+                    <circle cx="23" cy="144" r="2" fill="#4FC3F7" class="qi-dot" id="qiD5"/>
+                    <circle cx="23" cy="56" r="2" fill="#7B3FF2" class="qi-dot" id="qiD6"/>
+                    <circle cx="100" cy="56" r="1.5" fill="#A855F7" class="qi-dot" id="qiD7"/>
+                    <circle cx="139" cy="78" r="1.5" fill="#A855F7" class="qi-dot" id="qiD8"/>
+                    <circle cx="139" cy="122" r="1.5" fill="#A855F7" class="qi-dot" id="qiD9"/>
+                    <circle cx="100" cy="144" r="1.5" fill="#A855F7" class="qi-dot" id="qiD10"/>
+                    <circle cx="61" cy="122" r="1.5" fill="#A855F7" class="qi-dot" id="qiD11"/>
+                    <circle cx="61" cy="78" r="1.5" fill="#A855F7" class="qi-dot" id="qiD12"/>
+                    <!-- Q glyph: involuted spiral -->
+                    <path d="M72 130 Q72 70 100 70 Q128 70 128 100 Q128 130 100 130 Q82 130 82 110 Q82 90 100 90 Q112 90 112 100 Q112 110 100 108" class="qi-glyph" id="qiQ" stroke-width="2.8"/>
+                    <!-- Involution tail -->
+                    <path d="M118 124 L140 148" class="qi-glyph" id="qiTail" stroke-width="2.2"/>
+                    <!-- I glyph: vertical with serifs -->
+                    <line x1="155" y1="72" x2="155" y2="130" class="qi-glyph" id="qiI" stroke-width="2.8"/>
+                    <line x1="146" y1="72" x2="164" y2="72" class="qi-glyph" id="qiIs1" stroke-width="1.8"/>
+                    <line x1="146" y1="130" x2="164" y2="130" class="qi-glyph" id="qiIs2" stroke-width="1.8"/>
+                </svg>
+            </div>
+
+            <!-- Layer 7: Sigil images -->
             <img class="intro-sigil" id="s1" src="assets/sigil-wireframe.png" alt="">
             <img class="intro-sigil" id="s2" src="assets/sigil-logo.png" alt="">
-            <img class="intro-sigil" id="s3" src="assets/sigil-full.png" alt="Clear Seas Solutions">
-            <div class="intro-text" id="t1" style="bottom:14%"><div class="lbl">Lattice Geometry Detected</div><div class="big">E8 x D8</div><div class="dim">240 roots. 6 shells. Cross-parity projection.</div></div>
-            <div class="intro-text" id="t2" style="bottom:12%"><div class="lbl">Clear Seas Solutions LLC</div><div class="big">Post-Quantum</div><div class="dim">The revolution will not be in a structured format.</div></div>
-            <div class="intro-text" id="t3" style="bottom:10%"><div class="big" style="font-size:clamp(18px,3.5vw,36px)">Coming Soon</div><div class="dim">Solo-developed. No institution. No team. No funding. Just geometry.</div></div>
-            <div class="intro-text" id="t4" style="top:50%;transform:translateY(-50%)"><div class="big" style="font-size:clamp(13px,2vw,20px);letter-spacing:6px">Later we will show you</div><div class="big" style="margin-top:6px">the singular in singularity</div></div>
+            <img class="intro-sigil" id="s3" src="assets/sigil-full.png" alt="">
+
+            <!-- Layer 8: Text reveals (7 phases) -->
+            <div class="intro-text" id="t0" style="top:50%;transform:translateY(-50%)">
+                <div class="lbl">Initializing</div>
+            </div>
+            <div class="intro-text" id="t1" style="bottom:14%">
+                <div class="lbl">Lattice Geometry Detected</div>
+                <div class="big">E8 x D8</div>
+                <div class="dim">240 roots. 6 shells. Cross-parity projection.</div>
+            </div>
+            <div class="intro-text" id="t2" style="bottom:12%">
+                <div class="lbl">Classification</div>
+                <div class="big">Quantum Involution</div>
+                <div class="sub">Q - I</div>
+            </div>
+            <div class="intro-text" id="t3" style="bottom:12%">
+                <div class="lbl">Clear Seas Solutions LLC</div>
+                <div class="big">Post-Quantum</div>
+                <div class="dim">The revolution will not be in a structured format.</div>
+            </div>
+            <div class="intro-text" id="t4" style="bottom:10%">
+                <div class="big" style="font-size:clamp(18px,3.5vw,36px)">3 ECC Keys Broken</div>
+                <div class="dim">IBM Quantum Hardware. Shor's Algorithm. Verified.</div>
+            </div>
+            <div class="intro-text" id="t5" style="top:50%;transform:translateY(-50%)">
+                <div class="big" style="font-size:clamp(14px,2.2vw,22px);letter-spacing:8px">The involution has begun</div>
+            </div>
+            <div class="intro-text" id="t6" style="top:50%;transform:translateY(-50%)">
+                <div class="big" style="font-size:clamp(12px,1.8vw,18px);letter-spacing:6px">Later we will show you</div>
+                <div class="big" style="margin-top:6px">the singular in singularity</div>
+            </div>
         </div>
     </section>
 
     <!-- ═══ CATALOG HEADER ═══ -->
     <header class="cat-header">
         <h1>Technology Codex</h1>
-        <p>A preview of what Clear Seas Solutions is building. We will be licensing this technology. We are looking for partners to help scale a paradigm shift.</p>
+        <p>A preview of what Quantum Involution is building. Proprietary technology developed by a single researcher. We are looking for partners to help license and scale a paradigm shift.</p>
     </header>
 
-    <!-- ── Stats ── -->
+    <!-- Stats -->
     <div class="stats" id="statsBar">
         <div style="text-align:center"><div class="stat-val">6+</div><div class="stat-lbl">Technology Families</div></div>
         <div style="text-align:center"><div class="stat-val">1</div><div class="stat-lbl">Developer</div></div>
         <div style="text-align:center"><div class="stat-val">0</div><div class="stat-lbl">Institutions</div></div>
         <div style="text-align:center"><div class="stat-val">3</div><div class="stat-lbl">ECC Keys Broken</div></div>
+        <div style="text-align:center"><div class="stat-val">8+</div><div class="stat-lbl">Patent Families</div></div>
     </div>
 
     <!-- ═══ TECH CATALOG ═══ -->
@@ -200,6 +396,7 @@
                 <div class="card-visual">
                     <img src="assets/sigil-wireframe.png" alt="">
                     <div class="card-overlay"></div>
+                    <div class="card-shimmer"></div>
                 </div>
                 <div class="card-body">
                     <h3 class="card-title">Post-Quantum Internet Protocol</h3>
@@ -215,8 +412,9 @@
 
             <div class="card">
                 <div class="card-visual">
-                    <img src="assets/moire-engine.png" alt="" style="filter:none;mix-blend-mode:normal;opacity:0.8">
+                    <img src="assets/moire-engine.png" alt="" style="filter:none;mix-blend-mode:normal;opacity:0.75">
                     <div class="card-overlay"></div>
+                    <div class="card-shimmer"></div>
                 </div>
                 <div class="card-body">
                     <h3 class="card-title">Xylatic Multidimensional Swarm Lattice Algorithms</h3>
@@ -234,6 +432,7 @@
                 <div class="card-visual">
                     <img src="assets/sigil-logo.png" alt="">
                     <div class="card-overlay"></div>
+                    <div class="card-shimmer"></div>
                 </div>
                 <div class="card-body">
                     <h3 class="card-title">Deterministic Synthetic Cognition</h3>
@@ -251,6 +450,7 @@
                 <div class="card-visual">
                     <img src="assets/sigil-full.png" alt="">
                     <div class="card-overlay"></div>
+                    <div class="card-shimmer"></div>
                 </div>
                 <div class="card-body">
                     <h3 class="card-title">Geometric Self-Awareness</h3>
@@ -267,7 +467,8 @@
             <div class="card">
                 <div class="card-visual">
                     <img src="assets/sigil-wireframe.png" alt="">
-                    <div class="card-overlay" style="background:linear-gradient(135deg,rgba(79,195,247,0.1),rgba(123,63,242,0.05))"></div>
+                    <div class="card-overlay" style="background:linear-gradient(135deg,rgba(79,195,247,0.08),rgba(123,63,242,0.04))"></div>
+                    <div class="card-shimmer"></div>
                 </div>
                 <div class="card-body">
                     <h3 class="card-title">Room Temperature Quantum Deterministic Emulation</h3>
@@ -284,7 +485,8 @@
             <div class="card">
                 <div class="card-visual">
                     <img src="assets/sigil-logo.png" alt="">
-                    <div class="card-overlay" style="background:linear-gradient(135deg,rgba(255,180,0,0.05),rgba(123,63,242,0.08))"></div>
+                    <div class="card-overlay" style="background:linear-gradient(135deg,rgba(255,180,0,0.04),rgba(123,63,242,0.06))"></div>
+                    <div class="card-shimmer"></div>
                 </div>
                 <div class="card-body">
                     <h3 class="card-title">Optical / Quantum / Binary Parity Codec</h3>
@@ -324,8 +526,8 @@
     <!-- ═══ CLOSING ═══ -->
     <section class="closing" id="closingSection">
         <div class="closing-inner" id="cInner">
-            <h2>A Brave New World</h2>
-            <p>One person. No team. No funding. No institution. The quantum code is the part we're giving away. The part we're keeping is the part that matters.</p>
+            <h2>The Involution Has Begun</h2>
+            <p>One person. No team. No funding. No institution. The quantum code is the part we are giving away. The part we are keeping is the part that matters.</p>
             <div class="cta-row">
                 <a class="cta-link cta-1" href="https://github.com/Domusgpt/Pauly-Shors-Quantum-Al-Gore-Rhythm">View Q-Day Submission</a>
                 <a class="cta-link cta-2" href="mailto:Paul@clearseassolutions.com">Contact</a>
@@ -333,12 +535,43 @@
         </div>
     </section>
 
-    <footer><p>&copy; 2025-2026 <a href="#">Clear Seas Solutions LLC</a> / Paul J. Phillips</p></footer>
+    <footer><p>&copy; 2025-2026 <a href="#">Quantum Involution</a> / Clear Seas Solutions LLC / Paul J. Phillips</p></footer>
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        if (typeof gsap === 'undefined') {
-            document.querySelectorAll('.card,.results-inner,.closing-inner').forEach(el=>{el.style.opacity=1;el.style.transform='none'});
+
+        // ══ PARTICLE FIELD ══
+        (function(){
+            const c=document.getElementById('particleCanvas');
+            if(!c)return;
+            const ctx=c.getContext('2d');
+            let w,h,particles=[];
+            function resize(){w=c.width=c.offsetWidth;h=c.height=c.offsetHeight}
+            resize();window.addEventListener('resize',resize);
+            for(let i=0;i<80;i++){
+                particles.push({x:Math.random()*2000,y:Math.random()*2000,r:Math.random()*1.5+0.3,
+                    vx:(Math.random()-0.5)*0.3,vy:(Math.random()-0.5)*0.3,
+                    color:Math.random()>0.5?'rgba(123,63,242,':'rgba(79,195,247,',
+                    alpha:Math.random()*0.4+0.1})
+            }
+            function draw(){
+                ctx.clearRect(0,0,w,h);
+                particles.forEach(p=>{
+                    p.x+=p.vx;p.y+=p.vy;
+                    if(p.x<0)p.x=w;if(p.x>w)p.x=0;
+                    if(p.y<0)p.y=h;if(p.y>h)p.y=0;
+                    ctx.beginPath();ctx.arc(p.x*(w/2000),p.y*(h/2000),p.r,0,Math.PI*2);
+                    ctx.fillStyle=p.color+p.alpha+')';ctx.fill();
+                });
+                requestAnimationFrame(draw);
+            }
+            draw();
+        })();
+
+        // ══ GSAP FALLBACK ══
+        if(typeof gsap==='undefined'){
+            document.querySelectorAll('.card,.results-inner,.closing-inner,.nav').forEach(el=>{el.style.opacity=1;el.style.transform='none'});
+            document.getElementById('qiLogo').querySelectorAll('*').forEach(el=>{el.style.opacity=1});
             return;
         }
         gsap.registerPlugin(ScrollTrigger);
@@ -346,38 +579,150 @@
         // Scroll progress
         gsap.to('#scrollBar',{scaleX:1,ease:'none',scrollTrigger:{trigger:'body',start:'top top',end:'bottom bottom',scrub:0.3}});
 
-        // ══ INTRO — 1000vh Cinematic ══
-        const tl=gsap.timeline({scrollTrigger:{trigger:'#introSection',start:'top top',end:'bottom bottom',scrub:0.6,pin:'#introPin'}});
+        // ══ INTRO — 1200vh MULTI-LAYERED CINEMATIC ══
+        const tl=gsap.timeline({scrollTrigger:{trigger:'#introSection',start:'top top',end:'bottom bottom',scrub:0.5,pin:'#introPin'}});
 
-        tl.to('#lattice',{opacity:0.4,duration:0.08},0);
+        // ── Phase 0 (0.00-0.08): Awakening — particles, grid, radial, vignette fade in ──
+        tl.to('#particleCanvas',{opacity:0.6,duration:0.04},0);
+        tl.to('#introGrid',{opacity:1,duration:0.06},0.01);
+        tl.to('#introRadial',{opacity:1,duration:0.06},0.01);
+        tl.to('#vignette',{opacity:1,duration:0.04},0);
+        tl.to('#t0',{opacity:1,duration:0.03},0.02);
+        tl.to('#t0',{opacity:0,duration:0.02},0.06);
 
-        // Phase 1: Wireframe
-        tl.fromTo('#s1',{opacity:0,scale:0.5,rotation:-20},{opacity:0.8,scale:1,rotation:0,duration:0.12,ease:'power2.out'},0.02);
-        tl.to('#t1',{opacity:1,duration:0.06},0.05);
-        tl.to('#s1',{opacity:0,scale:1.1,duration:0.06},0.2);
-        tl.to('#t1',{opacity:0,duration:0.03},0.22);
+        // Corners stagger in
+        tl.to('#cTL',{opacity:1,duration:0.03},0.03);
+        tl.to('#cTR',{opacity:1,duration:0.03},0.035);
+        tl.to('#cBR',{opacity:1,duration:0.03},0.04);
+        tl.to('#cBL',{opacity:1,duration:0.03},0.045);
 
-        // Phase 2: Logo
-        tl.fromTo('#s2',{opacity:0,scale:1.3,filter:'blur(15px)'},{opacity:0.9,scale:1,filter:'blur(0px)',duration:0.1,ease:'power3.out'},0.27);
-        tl.to('#t2',{opacity:1,duration:0.06},0.3);
-        tl.to('#lattice',{y:'-10%',rotation:2,duration:0.2},0.27);
-        tl.to('#s2',{opacity:0,y:-30,duration:0.06},0.46);
-        tl.to('#t2',{opacity:0,duration:0.03},0.46);
+        // Structural lines sweep in
+        tl.fromTo('#hLine1',{opacity:0,scaleX:0},{opacity:1,scaleX:1,transformOrigin:'left center',duration:0.04,ease:'power2.out'},0.04);
+        tl.fromTo('#hLine2',{opacity:0,scaleX:0},{opacity:1,scaleX:1,transformOrigin:'right center',duration:0.04,ease:'power2.out'},0.05);
+        tl.fromTo('#vLine1',{opacity:0,scaleY:0},{opacity:1,scaleY:1,transformOrigin:'center top',duration:0.04,ease:'power2.out'},0.05);
+        tl.fromTo('#vLine2',{opacity:0,scaleY:0},{opacity:1,scaleY:1,transformOrigin:'center bottom',duration:0.04,ease:'power2.out'},0.06);
 
-        // Phase 3: Full logo
-        tl.fromTo('#s3',{opacity:0,scale:0.85},{opacity:1,scale:1,duration:0.08,ease:'power2.out'},0.52);
-        tl.to('#t3',{opacity:1,duration:0.06},0.55);
-        tl.to('#s3',{opacity:0,filter:'blur(10px)',duration:0.06},0.68);
-        tl.to('#t3',{opacity:0,duration:0.03},0.7);
+        // Scanlines sweep
+        tl.fromTo('#scanline1',{opacity:0,y:'-10vh'},{opacity:1,y:'0vh',duration:0.06},0.04);
+        tl.fromTo('#scanline2',{opacity:0,y:'10vh'},{opacity:1,y:'0vh',duration:0.06},0.04);
 
-        // Phase 4: Singular
-        tl.to('#t4',{opacity:1,duration:0.08},0.75);
-        tl.to('#t4',{opacity:0,duration:0.06},0.88);
-        tl.to('#lattice',{opacity:0,duration:0.06},0.9);
+        // ── Phase 1 (0.08-0.20): Rings expand + wireframe sigil ──
+        tl.fromTo('#ring1',{opacity:0,scale:0.3},{opacity:1,scale:1,duration:0.06,ease:'power3.out'},0.08);
+        tl.fromTo('#ring2',{opacity:0,scale:0.2},{opacity:0.7,scale:1,duration:0.07,ease:'power3.out'},0.09);
+        tl.fromTo('#ring3',{opacity:0,scale:0.15},{opacity:0.5,scale:1,duration:0.08,ease:'power3.out'},0.10);
+        tl.fromTo('#ring4',{opacity:0,scale:0.1},{opacity:0.3,scale:1,duration:0.09,ease:'power3.out'},0.11);
 
-        // ══ CATALOG CARDS — Staggered GSAP entries ══
+        tl.fromTo('#s1',{opacity:0,scale:0.4,rotation:-30},{opacity:0.75,scale:1,rotation:0,duration:0.08,ease:'power2.out'},0.10);
+        tl.to('#t1',{opacity:1,duration:0.04},0.13);
+
+        // Rings slow-rotate during phase 1
+        tl.to('#ring1',{rotation:15,duration:0.15},0.10);
+        tl.to('#ring2',{rotation:-10,duration:0.15},0.10);
+        tl.to('#ring3',{rotation:8,duration:0.15},0.10);
+
+        // Exit phase 1
+        tl.to('#s1',{opacity:0,scale:1.15,filter:'blur(8px)',duration:0.04},0.20);
+        tl.to('#t1',{opacity:0,y:-20,duration:0.03},0.21);
+
+        // ── Phase 2 (0.24-0.38): Q-I Logo construction — element by element ──
+        // Rings contract slightly to frame
+        tl.to('#ring1',{scale:0.9,opacity:0.6,duration:0.06},0.24);
+        tl.to('#ring2',{scale:0.85,opacity:0.4,duration:0.06},0.24);
+
+        // Logo appears: rings first
+        tl.to('#qiGlowBg',{opacity:1,duration:0.04},0.24);
+        tl.fromTo('#qiR1',{opacity:0,attr:{r:120}},{opacity:0.8,attr:{r:88},duration:0.05,ease:'power3.out'},0.25);
+        tl.fromTo('#qiR2',{opacity:0,attr:{r:100}},{opacity:0.6,attr:{r:75},duration:0.05,ease:'power3.out'},0.26);
+        tl.fromTo('#qiR3',{opacity:0,attr:{r:85}},{opacity:0.9,attr:{r:62},duration:0.05,ease:'power3.out'},0.27);
+
+        // Field lines flash in
+        tl.to('#qiF1',{opacity:0.4,duration:0.02},0.28);
+        tl.to('#qiF2',{opacity:0.4,duration:0.02},0.285);
+        tl.to('#qiF3',{opacity:0.4,duration:0.02},0.29);
+
+        // Hexagons morph in
+        tl.fromTo('#qiH1',{opacity:0,scale:0.5,transformOrigin:'center center'},{opacity:0.5,scale:1,duration:0.04,ease:'back.out(1.5)'},0.29);
+        tl.fromTo('#qiH2',{opacity:0,scale:0.3,transformOrigin:'center center'},{opacity:0.5,scale:1,duration:0.04,ease:'back.out(1.5)'},0.30);
+
+        // Lattice dots pop in staggered
+        for(let i=1;i<=12;i++){
+            tl.to('#qiD'+i,{opacity:1,duration:0.015,ease:'power2.out'},0.30+i*0.003);
+        }
+
+        // Q glyph draws in
+        tl.fromTo('#qiQ',{opacity:0,strokeDasharray:'400',strokeDashoffset:'400'},{opacity:1,strokeDashoffset:0,duration:0.06,ease:'power2.inOut'},0.32);
+        tl.fromTo('#qiTail',{opacity:0,strokeDasharray:'50',strokeDashoffset:'50'},{opacity:1,strokeDashoffset:0,duration:0.03,ease:'power2.out'},0.36);
+
+        // I glyph draws in
+        tl.fromTo('#qiI',{opacity:0,strokeDasharray:'80',strokeDashoffset:'80'},{opacity:1,strokeDashoffset:0,duration:0.03,ease:'power2.inOut'},0.37);
+        tl.fromTo('#qiIs1',{opacity:0,scaleX:0,transformOrigin:'center center'},{opacity:1,scaleX:1,duration:0.02},0.39);
+        tl.fromTo('#qiIs2',{opacity:0,scaleX:0,transformOrigin:'center center'},{opacity:1,scaleX:1,duration:0.02},0.39);
+
+        // Brand text: "QUANTUM INVOLUTION" with Q-I subtitle
+        tl.to('#t2',{opacity:1,duration:0.04},0.38);
+
+        // Hold the logo moment
+        // Scanlines pulse
+        tl.to('#scanline1',{y:'5vh',opacity:0.5,duration:0.08},0.38);
+        tl.to('#scanline2',{y:'-5vh',opacity:0.5,duration:0.08},0.38);
+
+        // Exit phase 2
+        tl.to('#t2',{opacity:0,y:-15,duration:0.03},0.46);
+        // Logo scales down and dims but stays subtly
+        tl.to('#qiLogo',{scale:0.5,opacity:0.15,duration:0.06},0.46);
+
+        // ── Phase 3 (0.48-0.56): Sigil logo + "Post-Quantum" ──
+        tl.fromTo('#s2',{opacity:0,scale:1.4,filter:'blur(20px)'},{opacity:0.85,scale:1,filter:'blur(0px)',duration:0.06,ease:'power3.out'},0.48);
+        tl.to('#t3',{opacity:1,duration:0.04},0.50);
+        tl.to('#introGrid',{y:'-5%',rotation:1,duration:0.12},0.48);
+        tl.to('#s2',{opacity:0,y:-40,filter:'blur(6px)',duration:0.04},0.56);
+        tl.to('#t3',{opacity:0,duration:0.02},0.57);
+
+        // ── Phase 4 (0.58-0.66): Full sigil + "3 ECC Keys" ──
+        tl.fromTo('#s3',{opacity:0,scale:0.8},{opacity:1,scale:1,duration:0.05,ease:'power2.out'},0.58);
+        tl.to('#t4',{opacity:1,duration:0.04},0.60);
+        // Rings pulse
+        tl.to('#ring1',{scale:1.1,opacity:0.3,duration:0.06,ease:'power2.inOut'},0.60);
+        tl.to('#ring2',{scale:1.05,opacity:0.2,duration:0.06,ease:'power2.inOut'},0.60);
+        tl.to('#s3',{opacity:0,scale:1.1,filter:'blur(12px)',duration:0.04},0.66);
+        tl.to('#t4',{opacity:0,duration:0.02},0.67);
+
+        // ── Phase 5 (0.70-0.78): "The involution has begun" ──
+        // Everything contracts
+        tl.to('#ring1',{scale:0.6,opacity:0.1,duration:0.06},0.68);
+        tl.to('#ring2',{scale:0.5,opacity:0.05,duration:0.06},0.68);
+        tl.to('#ring3',{scale:0.4,opacity:0,duration:0.06},0.68);
+        tl.to('#ring4',{scale:0.3,opacity:0,duration:0.06},0.68);
+        tl.to('#t5',{opacity:1,duration:0.05},0.72);
+        tl.to('#t5',{opacity:0,duration:0.03},0.78);
+
+        // ── Phase 6 (0.80-0.90): Final — "the singular in singularity" ──
+        tl.to('#qiLogo',{scale:1.2,opacity:0.06,duration:0.08},0.80);
+        tl.to('#t6',{opacity:1,duration:0.05},0.82);
+        tl.to('#t6',{opacity:0,duration:0.04},0.89);
+
+        // ── Phase 7 (0.90-1.0): Everything fades out ──
+        tl.to('#particleCanvas',{opacity:0,duration:0.06},0.90);
+        tl.to('#introGrid',{opacity:0,duration:0.04},0.90);
+        tl.to('#introRadial',{opacity:0,duration:0.04},0.90);
+        tl.to('#vignette',{opacity:0,duration:0.04},0.92);
+        tl.to(['#hLine1','#hLine2','#vLine1','#vLine2'],{opacity:0,duration:0.03},0.91);
+        tl.to(['#cTL','#cTR','#cBL','#cBR'],{opacity:0,stagger:0.01,duration:0.02},0.92);
+        tl.to(['#scanline1','#scanline2'],{opacity:0,duration:0.03},0.93);
+        tl.to('#qiLogo',{opacity:0,duration:0.04},0.93);
+        tl.to(['#ring1','#ring2','#ring3','#ring4'],{opacity:0,duration:0.04},0.93);
+
+        // ══ NAV — appears after intro ══
+        ScrollTrigger.create({
+            trigger:'#introSection',
+            start:'bottom 80%',
+            onEnter:()=>gsap.to('#mainNav',{opacity:1,y:0,duration:0.5,ease:'power3.out'}),
+            onLeaveBack:()=>gsap.to('#mainNav',{opacity:0,y:'-100%',duration:0.3})
+        });
+
+        // ══ CATALOG CARDS — Staggered entries ══
         gsap.from('.card',{
-            y:60,opacity:0,duration:0.7,stagger:0.1,ease:'power3.out',
+            y:60,opacity:0,duration:0.8,stagger:0.12,ease:'power3.out',
             scrollTrigger:{trigger:'#techGrid',start:'top 80%',toggleActions:'play none none none'}
         });
 
