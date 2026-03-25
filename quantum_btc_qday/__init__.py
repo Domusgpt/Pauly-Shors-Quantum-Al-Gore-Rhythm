@@ -13,5 +13,5 @@ Architecture:
 """
 
 __version__ = "1.0.0"
-__author__ = "Paul J. Phillips"
+__author__ = "Phillips / Patent-HexagalPairty"
 __competition__ = "Project Eleven Q-Day Prize (April 2025 - April 2026)"

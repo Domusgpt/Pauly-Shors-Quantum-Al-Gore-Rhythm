@@ -182,14 +182,14 @@ class QDayAttackPipeline:
         shor = ShorECDLP(self.curve, self.generator, self.public_key)
 
         # For small keys, use simplified oracle
-        use_simplified = (self.group_order <= 64)
-
+        # Always use honest ECPointOracle — computes aP + bQ from public key only
+        # Never use SimplifiedECOracle which embeds the secret key
         result = shor.run_attack(
             backend=self.backend,
             shots=shots,
             max_iterations=max_iterations,
-            use_simplified_oracle=use_simplified,
-            known_key=self.secret_key if use_simplified else None
+            use_simplified_oracle=False,
+            known_key=None
         )
 
         elapsed = time.time() - start_time
@@ -238,11 +238,12 @@ class QDayAttackPipeline:
 
     def export_qasm(self, filepath: str):
         """Export the attack circuit as OpenQASM for submission."""
+        if not hasattr(self, 'public_key'):
+            self.generate_target()
         shor = ShorECDLP(self.curve, self.generator, self.public_key)
-        use_simplified = (self.group_order <= 64)
         qc = shor.build_circuit(
-            use_simplified_oracle=use_simplified,
-            known_key=self.secret_key if use_simplified else None
+            use_simplified_oracle=False,
+            known_key=None
         )
         from qiskit.qasm2 import dumps as qasm2_dumps
         qasm_str = qasm2_dumps(qc)
@@ -255,11 +256,12 @@ class QDayAttackPipeline:
         from qiskit import transpile
         from qiskit_aer import AerSimulator
 
+        if not hasattr(self, 'public_key'):
+            self.generate_target()
         shor = ShorECDLP(self.curve, self.generator, self.public_key)
-        use_simplified = (self.group_order <= 64)
         qc = shor.build_circuit(
-            use_simplified_oracle=use_simplified,
-            known_key=self.secret_key if use_simplified else None
+            use_simplified_oracle=False,
+            known_key=None
         )
 
         transpiled = transpile(qc, optimization_level=3)

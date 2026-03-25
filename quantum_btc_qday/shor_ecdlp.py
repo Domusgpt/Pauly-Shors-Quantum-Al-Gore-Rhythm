@@ -178,7 +178,7 @@ class ShorECDLP:
             # Method 1: Direct ratio
             # k = -j1 * j2^(-1) mod n
             try:
-                j2_inv = pow(j2 % n, n - 2, n) if n > 1 else 0
+                j2_inv = pow(j2 % n, -1, n) if n > 1 else 0
                 k_candidate = (-j1 * j2_inv) % n
                 if k_candidate > 0:
                     candidates.add(k_candidate)
@@ -195,7 +195,7 @@ class ShorECDLP:
                     # j1/N ≈ r*k/n, so k ≈ j1*n/(N*r)
                     if r != 0:
                         try:
-                            r_inv = pow(r % n, n - 2, n) if n > 1 else 0
+                            r_inv = pow(r % n, -1, n) if n > 1 else 0
                             k_est = (j1 * n * r_inv) // N if N > 0 else 0
                             for delta in range(-2, 3):
                                 k_try = (k_est + delta) % n
@@ -408,14 +408,13 @@ def attack_ecc_key(bits: int, secret_key: Optional[int] = None,
 
     shor = ShorECDLP(curve, G, Q)
 
-    # For small keys, use simplified oracle for proof of concept
-    use_simplified = (n <= 64)
-
+    # Always use the honest ECPointOracle (computes aP + bQ from public key only)
+    # Never use SimplifiedECOracle which embeds the secret key in the circuit
     result = shor.run_attack(
         backend=backend,
         shots=shots,
-        use_simplified_oracle=use_simplified,
-        known_key=secret_key if use_simplified else None
+        use_simplified_oracle=False,
+        known_key=None
     )
 
     if result.success:

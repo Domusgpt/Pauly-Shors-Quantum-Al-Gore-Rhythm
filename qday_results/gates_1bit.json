@@ -1,14 +1,14 @@
 {
   "circuit_name": "Shor_ECDLP_QDay",
   "target_bits": 1,
-  "total_qubits": 17,
+  "total_qubits": 18,
   "total_depth": 4,
   "gate_counts": {
     "h": 14,
     "measure": 14,
     "barrier": 3,
     "IQFT": 2,
-    "SimplifiedOracle": 1
+    "EC_Oracle": 1
   },
   "gates_by_qubit": {}
 }

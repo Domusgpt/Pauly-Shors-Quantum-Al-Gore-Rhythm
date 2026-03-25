@@ -2,7 +2,7 @@
 
 ## Competition
 - **Prize**: Project Eleven Q-Day Prize (1 BTC)
-- **Website**: https://qprize.org
+- **Website**: https://www.qdayprize.com/
 - **Deadline**: April 5, 2026
 - **Target**: Break ECC keys (1-25 bits) using Shor's algorithm on a quantum computer
 
@@ -141,5 +141,5 @@ python -m quantum_btc_qday.run_qday_attack --bits 3 --export-gates gates_3bit.js
 
 ## Contact
 
-Submitted for the Project Eleven Q-Day Prize (https://qprize.org)
-Paul J. Phillips — Clear Seas Solutions LLC
+Submitted for the Project Eleven Q-Day Prize (https://www.qdayprize.com/)
+Repository: Patent-HexagalPairty-
