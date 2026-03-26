@@ -1,0 +1,131 @@
+{
+  "timestamp": "2026-03-25T18:41:17.808540",
+  "target_bits": 4,
+  "curve_params": {
+    "a": 0,
+    "b": 7,
+    "p": 13,
+    "name": "P11-4bit",
+    "group_order": 7
+  },
+  "generator": "(11, 5)",
+  "public_key": "(11, 8)",
+  "recovered_key": 6,
+  "verified": true,
+  "circuit_stats": {
+    "num_qubits": 22,
+    "depth": 28998,
+    "precision_bits": 7,
+    "optimization_level": 3
+  },
+  "backend_info": {
+    "type": "simulator",
+    "noise": false,
+    "name": "AerSimulator"
+  },
+  "approach_description": "Shor's algorithm for ECDLP on 4-bit ECC key. Curve E: y\u00b2 = x\u00b3 + 0x + 7 over GF(13). Group order n = 7. Two quantum registers of 7 qubits each prepared in uniform superposition. Oracle computes aP + bQ via lookup table. Inverse QFT applied to both registers. Key extracted via continued fractions and lattice reduction on measurements. Method is general and scales to 256-bit keys with sufficient qubits.",
+  "num_measurements": 4096,
+  "execution_time_seconds": 37.8227903842926,
+  "gate_level_summary": {
+    "cx": 21354,
+    "p": 12336,
+    "tdg": 3696,
+    "t": 2310,
+    "u3": 1599,
+    "u2": 924,
+    "rz": 462,
+    "h": 308,
+    "crz": 154,
+    "u": 29,
+    "measure": 14,
+    "u1": 8,
+    "barrier": 3
+  },
+  "measurement_stats": {
+    "total_shots": 4096,
+    "unique_outcomes": 64,
+    "entropy": 4.9685,
+    "max_entropy": 14,
+    "entropy_efficiency": 0.3549,
+    "top_peaks": [
+      [
+        [
+          0,
+          0
+        ],
+        778
+      ],
+      [
+        [
+          16,
+          112
+        ],
+        302
+      ],
+      [
+        [
+          112,
+          16
+        ],
+        269
+      ],
+      [
+        [
+          96,
+          32
+        ],
+        245
+      ],
+      [
+        [
+          32,
+          96
+        ],
+        202
+      ],
+      [
+        [
+          48,
+          80
+        ],
+        140
+      ],
+      [
+        [
+          48,
+          64
+        ],
+        120
+      ],
+      [
+        [
+          80,
+          48
+        ],
+        108
+      ],
+      [
+        [
+          80,
+          64
+        ],
+        106
+      ],
+      [
+        [
+          64,
+          64
+        ],
+        99
+      ]
+    ],
+    "candidate_vote_counts": {
+      "6": 1048,
+      "4": 1260,
+      "5": 1111,
+      "1": 1853,
+      "2": 1190,
+      "3": 1087
+    }
+  }
+}

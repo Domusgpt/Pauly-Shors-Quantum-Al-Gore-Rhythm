@@ -255,7 +255,7 @@ def _primes_up_to(n: int) -> List[int]:
     return [i for i, v in enumerate(sieve) if v]
 
 
-# ─── Standard small test curves ─────────────────────────────────────────────
+# ─── Standard small test curves (original, used for development) ────────────
 
 # 1-bit: Trivial curve, group order 2-3
 CURVE_1BIT = EllipticCurve(a=1, b=0, p=3, name="QDay-1bit")
@@ -273,7 +273,45 @@ CURVE_4BIT = EllipticCurve(a=1, b=1, p=13, name="QDay-4bit")
 CURVE_5BIT = EllipticCurve(a=1, b=1, p=29, name="QDay-5bit")
 
 
-# Pre-built catalogue
+# ─── PROJECT ELEVEN OFFICIAL STANDARD CURVES (seed=536, y²=x³+7) ───────────
+# From https://www.qdayprize.com/curves.json
+# ALL curves use a=0, b=7 (same equation form as Bitcoin secp256k1)
+# Must break THESE keys to qualify for the Q-Day Prize
+
+P11_CURVE_4BIT = EllipticCurve(a=0, b=7, p=13, name="P11-4bit")
+P11_CURVE_6BIT = EllipticCurve(a=0, b=7, p=43, name="P11-6bit")
+P11_CURVE_7BIT = EllipticCurve(a=0, b=7, p=67, name="P11-7bit")
+P11_CURVE_8BIT = EllipticCurve(a=0, b=7, p=163, name="P11-8bit")
+P11_CURVE_9BIT = EllipticCurve(a=0, b=7, p=349, name="P11-9bit")
+P11_CURVE_10BIT = EllipticCurve(a=0, b=7, p=547, name="P11-10bit")
+P11_CURVE_11BIT = EllipticCurve(a=0, b=7, p=1051, name="P11-11bit")
+P11_CURVE_12BIT = EllipticCurve(a=0, b=7, p=2089, name="P11-12bit")
+
+# Official P11 standard keys: (bits, curve_order, subgroup_order, generator, private_key, public_key)
+P11_STANDARD_KEYS = {
+    4:  {"order": 7,     "n": 7,     "G": (11, 5),      "d": 6,      "Q": (11, 8)},
+    6:  {"order": 31,    "n": 31,    "G": (34, 3),       "d": 18,     "Q": (21, 25)},
+    7:  {"order": 79,    "n": 79,    "G": (48, 60),      "d": 56,     "Q": (52, 7)},
+    8:  {"order": 139,   "n": 139,   "G": (112, 53),     "d": 103,    "Q": (122, 144)},
+    9:  {"order": 313,   "n": 313,   "G": (22, 191),     "d": 135,    "Q": (138, 315)},
+    10: {"order": 547,   "n": 547,   "G": (386, 359),    "d": 165,    "Q": (286, 462)},
+    11: {"order": 1093,  "n": 1093,  "G": (471, 914),    "d": 756,    "Q": (179, 86)},
+    12: {"order": 2143,  "n": 2143,  "G": (1417, 50),    "d": 1384,   "Q": (1043, 1795)},
+}
+
+P11_CURVES = {
+    4: P11_CURVE_4BIT,
+    6: P11_CURVE_6BIT,
+    7: P11_CURVE_7BIT,
+    8: P11_CURVE_8BIT,
+    9: P11_CURVE_9BIT,
+    10: P11_CURVE_10BIT,
+    11: P11_CURVE_11BIT,
+    12: P11_CURVE_12BIT,
+}
+
+
+# Pre-built catalogue (original dev curves)
 QDAY_CURVES = {
     1: CURVE_1BIT,
     2: CURVE_2BIT,

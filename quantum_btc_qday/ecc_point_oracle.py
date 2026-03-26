@@ -107,55 +107,83 @@ class ECPointOracle:
 
         return qc
 
+    @staticmethod
+    def _to_gray(n: int) -> int:
+        """Convert integer to Gray code."""
+        return n ^ (n >> 1)
+
+    @staticmethod
+    def _gray_code_order(num_bits: int) -> List[int]:
+        """Generate integers 0..2^num_bits-1 in Gray code order."""
+        return [ECPointOracle._to_gray(i) for i in range(1 << num_bits)]
+
     def _build_lookup_oracle(self, qc: QuantumCircuit, a_qubits: List[int],
                               b_qubits: List[int], out_qubits: List[int]):
         """
-        Build oracle using direct lookup table.
-        For each (a, b) pair, compute aP + bQ and encode result.
+        Build oracle using direct lookup table with Gray code ordering.
+
+        Gray code optimization: consecutive entries differ in only 1 bit,
+        so we apply at most 1 X gate between entries instead of flipping
+        all zero-controlled qubits for every entry. This significantly
+        reduces the total X gate count.
         """
         n_a = len(a_qubits)
         n_b = len(b_qubits)
         n_out = len(out_qubits)
         n = self.n_order
+        total_input_bits = n_a + n_b
+        all_input_qubits = a_qubits + b_qubits
 
+        # Collect all (a, b) pairs with non-zero encoded output
+        active_entries = []
         for a in range(n):
             for b in range(n):
                 point = self.point_table[(a, b)]
                 encoded = self._point_to_int(point)
                 if encoded == 0:
                     continue
-
-                # Compute target bits
                 target_bits = [(encoded >> i) & 1 for i in range(n_out)]
                 if not any(target_bits):
                     continue
+                # Combine a and b into a single integer: low n_a bits = a, next n_b bits = b
+                combined = a | (b << n_a)
+                active_entries.append((combined, target_bits))
 
-                # Compute input bits
-                a_bits = [(a >> i) & 1 for i in range(n_a)]
-                b_bits = [(b >> i) & 1 for i in range(n_b)]
+        if not active_entries:
+            return
 
-                # Flip qubits that should be 0 for this input
-                for idx in range(n_a):
-                    if a_bits[idx] == 0:
-                        qc.x(a_qubits[idx])
-                for idx in range(n_b):
-                    if b_bits[idx] == 0:
-                        qc.x(b_qubits[idx])
+        # Sort active entries in Gray code order for minimal bit-flip transitions.
+        # Build a Gray code rank lookup: gray_value -> position in Gray sequence
+        gray_rank = {}
+        for i in range(1 << total_input_bits):
+            gray_rank[self._to_gray(i)] = i
+        active_entries.sort(key=lambda e: gray_rank.get(e[0], e[0]))
 
-                ctrl_qubits = a_qubits + b_qubits
+        # Track the current flip state of each input qubit.
+        # The MCX gate fires when all control qubits are |1>.
+        # To match input value v, qubit i must be flipped (X) when bit i of v is 0.
+        # flip_state[i] = True means qubit i is currently flipped (X applied).
+        flip_state = [False] * total_input_bits
 
-                # Apply MCX for each output bit that should be 1
-                for out_idx in range(n_out):
-                    if target_bits[out_idx] == 1:
-                        qc.mcx(ctrl_qubits, out_qubits[out_idx])
+        for combined, target_bits in active_entries:
+            # Determine desired flip for this entry: flip where bit is 0
+            desired_flip = [(combined >> i) & 1 == 0 for i in range(total_input_bits)]
 
-                # Unflip
-                for idx in range(n_a):
-                    if a_bits[idx] == 0:
-                        qc.x(a_qubits[idx])
-                for idx in range(n_b):
-                    if b_bits[idx] == 0:
-                        qc.x(b_qubits[idx])
+            # Apply incremental X gates: only toggle qubits whose flip state differs
+            for i in range(total_input_bits):
+                if flip_state[i] != desired_flip[i]:
+                    qc.x(all_input_qubits[i])
+                    flip_state[i] = desired_flip[i]
+
+            # Apply MCX for each output bit that should be 1
+            for out_idx in range(n_out):
+                if target_bits[out_idx] == 1:
+                    qc.mcx(all_input_qubits, out_qubits[out_idx])
+
+        # Undo all remaining flips to restore input qubits to original state
+        for i in range(total_input_bits):
+            if flip_state[i]:
+                qc.x(all_input_qubits[i])
 
     def _build_arithmetic_oracle(self, qc: QuantumCircuit, a_reg, b_reg, out_reg):
         """

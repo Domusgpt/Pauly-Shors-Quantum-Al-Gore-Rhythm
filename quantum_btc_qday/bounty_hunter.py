@@ -64,7 +64,7 @@ TARGETS = """
  │  ─────────────────────────────                          │
  │  Q-Day Prize      1 BTC ($100K)  Break ECC via quantum  │
  │    Tool: factor   Deadline: Apr 5, 2026                 │
- │    https://www.qdayprize.com/                              │
+ │    https://www.qprize.org/                              │
  │                                                         │
  │  BlueQubit        0.25 BTC ($20K) Peaked circuits       │
  │    Tool: peaked   Active now                            │

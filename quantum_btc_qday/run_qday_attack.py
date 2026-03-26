@@ -72,7 +72,7 @@ Examples:
     print("=" * 60)
     print("  Project Eleven Q-Day Prize")
     print("  Shor's Algorithm for ECDLP")
-    print("  https://qprize.org")
+    print("  https://www.qdayprize.com/")
     print("=" * 60)
     print()
 

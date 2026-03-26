@@ -1,0 +1,37 @@
+{
+  "timestamp": "2026-03-20T23:39:20.056491",
+  "target_bits": 4,
+  "curve_params": {
+    "a": 1,
+    "b": 1,
+    "p": 13,
+    "name": "QDay-4bit",
+    "group_order": 18
+  },
+  "generator": "(1, 4)",
+  "public_key": "(8, 12)",
+  "recovered_key": 2,
+  "verified": true,
+  "circuit_stats": {
+    "num_qubits": 156,
+    "depth": 3657879,
+    "precision_bits": 11
+  },
+  "backend_info": {
+    "type": "ibm",
+    "name": "ibm_fez",
+    "num_qubits": 156,
+    "provider": "IBM Quantum"
+  },
+  "approach_description": "Shor's algorithm for ECDLP on 4-bit ECC key. Curve E: y\u00b2 = x\u00b3 + 1x + 1 over GF(13). Group order n = 18. Two quantum registers of 11 qubits each prepared in uniform superposition. Oracle computes aP + bQ via lookup table. Inverse QFT applied to both registers. Key extracted via continued fractions and lattice reduction on measurements. Method is general and scales to 256-bit keys with sufficient qubits.",
+  "num_measurements": 4096,
+  "execution_time_seconds": 1086.003853559494,
+  "gate_level_summary": {
+    "sx": 2982761,
+    "rz": 2022900,
+    "cz": 1385759,
+    "x": 72183,
+    "measure": 22,
+    "barrier": 3
+  }
+}

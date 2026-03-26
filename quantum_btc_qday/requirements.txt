@@ -1,8 +1,8 @@
-qiskit>=1.0
-qiskit-aer>=0.13
+qiskit>=2.0
+qiskit-aer>=0.15
 numpy>=1.24
-# IBM Quantum hardware (free tier)
-qiskit-ibm-runtime>=0.20
+# IBM Quantum hardware
+qiskit-ibm-runtime>=0.30
 # Optional: AWS Braket
 # amazon-braket-sdk>=1.50
 # qiskit-braket-provider>=0.4

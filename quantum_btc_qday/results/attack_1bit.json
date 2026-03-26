@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-03-18T20:40:42.532843",
+  "target_bits": 1,
+  "curve_params": {
+    "a": 1,
+    "b": 0,
+    "p": 3,
+    "name": "QDay-1bit",
+    "group_order": 4
+  },
+  "generator": "(2, 1)",
+  "public_key": "(2, 2)",
+  "recovered_key": 3,
+  "verified": true,
+  "circuit_stats": {
+    "num_qubits": 17,
+    "depth": 3054,
+    "precision_bits": 7
+  },
+  "backend_info": {
+    "type": "simulator",
+    "noise": false,
+    "name": "AerSimulator"
+  },
+  "approach_description": "Shor's algorithm for ECDLP on 1-bit ECC key. Curve E: y\u00b2 = x\u00b3 + 1x + 0 over GF(3). Group order n = 4. Two quantum registers of 7 qubits each prepared in uniform superposition. Oracle computes aP + bQ via lookup table. Inverse QFT applied to both registers. Key extracted via continued fractions and lattice reduction on measurements. Method is general and scales to 256-bit keys with sufficient qubits.",
+  "num_measurements": 4096,
+  "execution_time_seconds": 0.7227332592010498,
+  "gate_level_summary": {
+    "cx": 2310,
+    "p": 1332,
+    "tdg": 384,
+    "t": 240,
+    "u3": 180,
+    "u2": 96,
+    "rz": 48,
+    "h": 32,
+    "u": 28,
+    "u1": 23,
+    "crz": 16,
+    "measure": 14,
+    "barrier": 3
+  }
+}

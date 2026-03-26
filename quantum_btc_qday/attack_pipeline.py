@@ -23,7 +23,7 @@ from typing import Optional, Dict, Any, List
 from dataclasses import dataclass, asdict
 
 from .ecc_curves import EllipticCurve, ECPoint, get_curve, generate_keypair
-from .shor_ecdlp import ShorECDLP, ShorResult, attack_ecc_key
+from .shor_ecdlp import ShorECDLP, ShorResult, MeasurementStats, attack_ecc_key
 from .quantum_arithmetic import num_qubits_for_mod
 
 
@@ -43,9 +43,10 @@ class AttackReport:
     num_measurements: int
     execution_time_seconds: float
     gate_level_summary: Dict[str, int]
+    measurement_stats: Optional[Dict[str, Any]] = None
 
     def to_json(self) -> str:
-        return json.dumps(asdict(self), indent=2)
+        return json.dumps(asdict(self), indent=2, default=str)
 
     def save(self, filepath: str):
         with open(filepath, 'w') as f:
@@ -93,7 +94,7 @@ class QDayAttackPipeline:
 
     def _setup_ibm(self, token: Optional[str] = None,
                     instance: str = "ibm-q/open/main",
-                    backend_name: str = "ibm_brisbane", **kwargs):
+                    backend_name: str = "ibm_fez", **kwargs):
         """
         Set up IBM Quantum backend.
 
@@ -181,7 +182,9 @@ class QDayAttackPipeline:
         # Run Shor's algorithm
         shor = ShorECDLP(self.curve, self.generator, self.public_key)
 
-        # For small keys, use simplified oracle
+        # Use configurable optimization level (default 3 for IBM)
+        opt_level = getattr(self, 'optimization_level', 3)
+
         # Always use honest ECPointOracle — computes aP + bQ from public key only
         # Never use SimplifiedECOracle which embeds the secret key
         result = shor.run_attack(
@@ -189,10 +192,16 @@ class QDayAttackPipeline:
             shots=shots,
             max_iterations=max_iterations,
             use_simplified_oracle=False,
-            known_key=None
+            known_key=None,
+            optimization_level=opt_level
         )
 
         elapsed = time.time() - start_time
+
+        # Collect measurement statistics
+        mstats_dict = None
+        if result.measurement_stats:
+            mstats_dict = result.measurement_stats.to_dict()
 
         # Build report
         report = AttackReport(
@@ -213,12 +222,14 @@ class QDayAttackPipeline:
                 "num_qubits": result.num_qubits,
                 "depth": result.circuit_depth,
                 "precision_bits": shor.precision,
+                "optimization_level": opt_level,
             },
             backend_info=self.backend_info,
             approach_description=self._approach_description(),
             num_measurements=result.num_shots,
             execution_time_seconds=elapsed,
             gate_level_summary=result.gate_counts,
+            measurement_stats=mstats_dict,
         )
 
         return report
@@ -238,12 +249,11 @@ class QDayAttackPipeline:
 
     def export_qasm(self, filepath: str):
         """Export the attack circuit as OpenQASM for submission."""
-        if not hasattr(self, 'public_key'):
-            self.generate_target()
         shor = ShorECDLP(self.curve, self.generator, self.public_key)
+        use_simplified = (self.group_order <= 64)
         qc = shor.build_circuit(
-            use_simplified_oracle=False,
-            known_key=None
+            use_simplified_oracle=use_simplified,
+            known_key=self.secret_key if use_simplified else None
         )
         from qiskit.qasm2 import dumps as qasm2_dumps
         qasm_str = qasm2_dumps(qc)
@@ -256,15 +266,17 @@ class QDayAttackPipeline:
         from qiskit import transpile
         from qiskit_aer import AerSimulator
 
-        if not hasattr(self, 'public_key'):
-            self.generate_target()
         shor = ShorECDLP(self.curve, self.generator, self.public_key)
+        use_simplified = (self.group_order <= 64)
         qc = shor.build_circuit(
-            use_simplified_oracle=False,
-            known_key=None
+            use_simplified_oracle=use_simplified,
+            known_key=self.secret_key if use_simplified else None
         )
 
-        transpiled = transpile(qc, optimization_level=3)
+        # Decompose custom gates before transpiling to get primitive gate counts
+        qc_decomposed = qc.decompose().decompose().decompose()
+        backend = AerSimulator()
+        transpiled = transpile(qc_decomposed, backend, optimization_level=2)
 
         gate_info = {
             "circuit_name": "Shor_ECDLP_QDay",

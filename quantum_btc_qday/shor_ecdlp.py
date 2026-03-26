@@ -2,6 +2,7 @@
 Shor's Algorithm for Elliptic Curve Discrete Logarithm Problem (ECDLP)
 
 Core implementation of the quantum attack on ECC for the Q-Day Prize.
+Enhanced with noise-aware post-processing and statistical analysis.
 
 Given:
     - Elliptic curve E over GF(p)
@@ -28,9 +29,10 @@ References:
 
 import numpy as np
 from typing import Optional, Tuple, List, Dict
-from math import gcd
+from math import gcd, log2
 from fractions import Fraction
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from collections import Counter
 
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
 from qiskit.circuit.library import QFT
@@ -38,6 +40,29 @@ from qiskit.circuit.library import QFT
 from .ecc_curves import EllipticCurve, ECPoint, INFINITY, get_curve, generate_keypair
 from .ecc_point_oracle import ECPointOracle, SimplifiedECOracle
 from .quantum_arithmetic import num_qubits_for_mod
+
+
+@dataclass
+class MeasurementStats:
+    """Statistical analysis of measurement results."""
+    total_shots: int = 0
+    unique_outcomes: int = 0
+    entropy: float = 0.0
+    max_entropy: float = 0.0
+    entropy_efficiency: float = 0.0
+    top_peaks: List[Tuple[Tuple[int, int], int]] = field(default_factory=list)
+    candidate_vote_counts: Dict[int, int] = field(default_factory=dict)
+
+    def to_dict(self) -> dict:
+        return {
+            "total_shots": self.total_shots,
+            "unique_outcomes": self.unique_outcomes,
+            "entropy": round(self.entropy, 4),
+            "max_entropy": round(self.max_entropy, 4),
+            "entropy_efficiency": round(self.entropy_efficiency, 4),
+            "top_peaks": [(list(p), c) for p, c in self.top_peaks[:10]],
+            "candidate_vote_counts": self.candidate_vote_counts,
+        }
 
 
 @dataclass
@@ -52,6 +77,7 @@ class ShorResult:
     circuit_depth: int
     num_qubits: int
     gate_counts: Dict[str, int]
+    measurement_stats: Optional[MeasurementStats] = None
 
     def __repr__(self):
         status = "SUCCESS" if self.success else "FAILED"
@@ -165,23 +191,26 @@ class ShorECDLP:
 
         So k ≈ -j1/j2 mod n.
 
-        We use continued fractions to handle the approximation.
+        Enhanced with:
+        - Majority voting across measurements
+        - Noise-tolerant lattice point projection
+        - Continued fractions with neighborhood search
         """
         N = 2 ** self.precision
         n = self.n_order
-        candidates = set()
+        candidate_votes = Counter()
 
         for j1, j2 in measurements:
             if j2 == 0:
                 continue
 
-            # Method 1: Direct ratio
-            # k = -j1 * j2^(-1) mod n
+            # Method 1: Direct ratio with modular inverse
             try:
-                j2_inv = pow(j2 % n, -1, n) if n > 1 else 0
-                k_candidate = (-j1 * j2_inv) % n
-                if k_candidate > 0:
-                    candidates.add(k_candidate)
+                if gcd(j2 % n, n) == 1:
+                    j2_inv = pow(j2 % n, n - 2, n) if n > 1 else 0
+                    k_candidate = (-j1 * j2_inv) % n
+                    if k_candidate > 0:
+                        candidate_votes[k_candidate] += 1
             except (ValueError, ZeroDivisionError):
                 pass
 
@@ -192,32 +221,80 @@ class ShorECDLP:
                 n_candidate = frac.denominator
 
                 if n_candidate > 0 and n % n_candidate == 0:
-                    # j1/N ≈ r*k/n, so k ≈ j1*n/(N*r)
                     if r != 0:
                         try:
-                            r_inv = pow(r % n, -1, n) if n > 1 else 0
+                            r_inv = pow(r % n, n - 2, n) if gcd(r % n, n) == 1 and n > 1 else 0
                             k_est = (j1 * n * r_inv) // N if N > 0 else 0
-                            for delta in range(-2, 3):
+                            for delta in range(-3, 4):
                                 k_try = (k_est + delta) % n
                                 if k_try > 0:
-                                    candidates.add(k_try)
+                                    candidate_votes[k_try] += 1
                         except (ValueError, ZeroDivisionError):
                             pass
 
-            # Method 3: Direct lattice approach for small n
+            # Method 3: Noise-tolerant lattice point projection for small n
+            # Project noisy (j1/N, j2/N) onto nearest valid lattice point
             if n <= 256:
+                best_dist = float('inf')
+                best_k = None
                 for k_try in range(1, n):
-                    # Check if (j1, j2) is consistent with k_try
-                    # j1 ≈ r*k_try mod n scaled by N/n
-                    # j2 ≈ -r mod n scaled by N/n
                     for r in range(1, n):
                         expected_j1 = round((r * k_try % n) * N / n) % N
                         expected_j2 = round((-r % n) * N / n) % N
-                        if (abs(j1 - expected_j1) <= 1 and
-                            abs(j2 - expected_j2) <= 1):
-                            candidates.add(k_try)
+                        # Compute distance with wraparound
+                        d1 = min(abs(j1 - expected_j1), N - abs(j1 - expected_j1))
+                        d2 = min(abs(j2 - expected_j2), N - abs(j2 - expected_j2))
+                        dist = d1 * d1 + d2 * d2
+                        if dist < best_dist:
+                            best_dist = dist
+                            best_k = k_try
+                        if dist <= 1:
+                            candidate_votes[k_try] += 2  # Strong match
 
-        return sorted(candidates)
+                # Also add the nearest lattice point match
+                if best_k is not None and best_dist <= N * 0.1:
+                    candidate_votes[best_k] += 1
+
+        # Sort by vote count (majority voting)
+        sorted_candidates = sorted(candidate_votes.keys(),
+                                    key=lambda k: candidate_votes[k],
+                                    reverse=True)
+
+        # Store vote counts for statistical reporting
+        self._last_vote_counts = dict(candidate_votes)
+
+        return sorted_candidates
+
+    def compute_measurement_stats(self, measurements: List[Tuple[int, int]]) -> MeasurementStats:
+        """Compute statistical analysis of measurement outcomes."""
+        stats = MeasurementStats()
+        stats.total_shots = len(measurements)
+
+        if not measurements:
+            return stats
+
+        N = 2 ** self.precision
+        counter = Counter(measurements)
+        stats.unique_outcomes = len(counter)
+
+        # Shannon entropy
+        total = len(measurements)
+        for count in counter.values():
+            if count > 0:
+                p = count / total
+                stats.entropy -= p * log2(p)
+
+        stats.max_entropy = 2 * self.precision  # log2(N^2)
+        stats.entropy_efficiency = stats.entropy / stats.max_entropy if stats.max_entropy > 0 else 0
+
+        # Top peaks
+        stats.top_peaks = counter.most_common(20)
+
+        # Vote counts from last extraction
+        if hasattr(self, '_last_vote_counts'):
+            stats.candidate_vote_counts = self._last_vote_counts
+
+        return stats
 
     def verify_key(self, k: int) -> bool:
         """Verify that k is the correct secret key: Q == kG."""
@@ -227,7 +304,8 @@ class ShorECDLP:
     def run_attack(self, backend=None, shots: int = 1024,
                     max_iterations: int = 10,
                     use_simplified_oracle: bool = False,
-                    known_key: Optional[int] = None) -> ShorResult:
+                    known_key: Optional[int] = None,
+                    optimization_level: int = 3) -> ShorResult:
         """
         Execute the full Shor's ECDLP attack.
 
@@ -237,9 +315,10 @@ class ShorECDLP:
             max_iterations: Maximum number of circuit executions
             use_simplified_oracle: Use simplified oracle (for testing)
             known_key: Known key for simplified oracle verification
+            optimization_level: Transpiler optimization (0-3, default 3)
 
         Returns:
-            ShorResult with attack outcome
+            ShorResult with attack outcome and measurement statistics
         """
         from qiskit_aer import AerSimulator
         from qiskit import transpile
@@ -262,10 +341,14 @@ class ShorECDLP:
             type(backend).__module__.startswith('qiskit_ibm_runtime'))
         if is_ibm_backend:
             from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
-            pm = generate_preset_pass_manager(backend=backend, optimization_level=2)
+            pm = generate_preset_pass_manager(
+                backend=backend,
+                optimization_level=optimization_level
+            )
             transpiled = pm.run(qc_decomposed)
         else:
-            transpiled = transpile(qc_decomposed, backend, optimization_level=2)
+            transpiled = transpile(qc_decomposed, backend=None,
+                                   optimization_level=min(optimization_level, 3))
         gate_counts = dict(transpiled.count_ops())
         circuit_depth = transpiled.depth()
         num_qubits = transpiled.num_qubits
@@ -314,25 +397,28 @@ class ShorECDLP:
                 for _ in range(count):
                     all_measurements.append((j1, j2))
 
-            # Extract candidates
+            # Extract candidates with majority voting
             candidates = self.extract_key_from_measurements(all_measurements)
             all_candidates = candidates
 
-            # Verify each candidate
+            # Verify each candidate (ordered by vote count)
             for k_candidate in candidates:
                 if self.verify_key(k_candidate):
+                    mstats = self.compute_measurement_stats(all_measurements)
                     return ShorResult(
                         secret_key=k_candidate,
                         num_shots=len(all_measurements),
                         num_iterations=iteration + 1,
-                        measurements=all_measurements[:20],  # Keep first 20
+                        measurements=all_measurements[:20],
                         candidate_keys=candidates,
                         success=True,
                         circuit_depth=circuit_depth,
                         num_qubits=num_qubits,
-                        gate_counts=gate_counts
+                        gate_counts=gate_counts,
+                        measurement_stats=mstats
                     )
 
+        mstats = self.compute_measurement_stats(all_measurements)
         return ShorResult(
             secret_key=None,
             num_shots=len(all_measurements),
@@ -342,7 +428,8 @@ class ShorECDLP:
             success=False,
             circuit_depth=circuit_depth,
             num_qubits=num_qubits,
-            gate_counts=gate_counts
+            gate_counts=gate_counts,
+            measurement_stats=mstats
         )
 
 
