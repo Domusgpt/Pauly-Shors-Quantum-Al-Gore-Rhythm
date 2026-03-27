@@ -1,0 +1,10 @@
+{
+  "bits": 7,
+  "recovered_key": 56,
+  "expected_key": 56,
+  "verified": true,
+  "method": "classical_brute_force",
+  "time": 0.00038623809814453125,
+  "curve": "y\u00b2=x\u00b3+7 over GF(67)",
+  "group_order": 79
+}
