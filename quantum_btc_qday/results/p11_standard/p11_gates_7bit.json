@@ -1,0 +1,15 @@
+{
+  "target_bits": 7,
+  "group_order": 79,
+  "total_qubits": 156,
+  "total_depth": 5677801,
+  "total_native_gates": 5803367,
+  "gate_counts": {
+    "rz": 2932778,
+    "cx": 1967430,
+    "sx": 890792,
+    "x": 12334,
+    "measure": 30,
+    "barrier": 3
+  }
+}

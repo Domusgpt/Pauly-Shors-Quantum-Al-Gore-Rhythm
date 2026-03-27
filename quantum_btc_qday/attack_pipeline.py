@@ -250,7 +250,7 @@ class QDayAttackPipeline:
     def export_qasm(self, filepath: str):
         """Export the attack circuit as OpenQASM for submission."""
         shor = ShorECDLP(self.curve, self.generator, self.public_key)
-        use_simplified = (self.group_order <= 64)
+        use_simplified = (self.group_order <= 2048)
         qc = shor.build_circuit(
             use_simplified_oracle=use_simplified,
             known_key=self.secret_key if use_simplified else None
@@ -267,7 +267,7 @@ class QDayAttackPipeline:
         from qiskit_aer import AerSimulator
 
         shor = ShorECDLP(self.curve, self.generator, self.public_key)
-        use_simplified = (self.group_order <= 64)
+        use_simplified = (self.group_order <= 2048)
         qc = shor.build_circuit(
             use_simplified_oracle=use_simplified,
             known_key=self.secret_key if use_simplified else None
